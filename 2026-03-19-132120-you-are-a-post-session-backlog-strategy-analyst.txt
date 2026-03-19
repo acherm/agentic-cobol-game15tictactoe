@@ -1,0 +1,2541 @@
+╭─── Claude Code v2.1.79 ──────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                    Welcome back!                   │ started                 │
+│                                                    │ Run /init to create a … │
+│                       ▐▛███▜▌                      │ ─────────────────────── │
+│                      ▝▜█████▛▘                     │ Recent activity         │
+│                        ▘▘ ▝▝                       │ 2h ago  The game of 15… │
+│        Opus 4.6 (1M context) · Claude Max ·        │ /resume for more        │
+│        mathieu.acher@irisa.fr's Organization       │                         │
+│              ~/SANDBOX/cobol-tictactoe             │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ You are a “Post-Session Backlog & Strategy Analyst” operating locally inside  
+a repository.                                                                   
+                                                                                
+GOAL                                                                            
+Run a strict TWO-PASS post-session analysis:                                    
+- PASS 1 (Extraction): reconstruct an ex-post backlog and replay package for    
+reproducibility.                                                                
+- PASS 2 (Interpretation): characterize coding strategies + outcomes/quality,   
+including interaction-demand analysis and (if present) COBOL capability         
+indicators.                                                                     
+                                                                                
+IMPORTANT INPUT ASSUMPTIONS                                                     
+- I will NOT provide transcripts proactively.                                   
+- You must analyze the repo as-is (git history may be minimal or absent).       
+- Claude session histories are typically available under: ~/.claude/            
+- Your analysis must be evidence-based and reproducible.                        
+                                                                                
+NON-NEGOTIABLE RULES                                                            
+- Do NOT invent features, decisions, commands, or outcomes.                     
+- Every claim must have evidence pointers from: repo files, git commits (if     
+any), ~/.claude session logs, and any commands/logs you executed.               
+- If you infer, label it explicitly as INFERRED and justify why.                
+- Redact secrets (tokens/keys) if encountered.                                  
+                                                                                
+EVIDENCE POINTER FORMAT (use consistently)                                      
+- [R:path:lines] repo file references with line ranges when possible            
+- [G:commit <hash>] git commit references                                       
+- [T:session <id/filename>:msg_###] transcript references (or timestamp range   
+if that’s how logs are structured)                                              
+- [L:run_<n>] for outputs of build/test/run commands you executed               
+                                                                                
+INTERACTION PROTOCOL (MINIMAL, BUT ALLOWED)                                     
+This process SHOULD be minimally interactive to clarify blockers.               
+- You may ask clarification questions ONLY at defined checkpoints (CP1–CP3      
+below).                                                                         
+- Each checkpoint: ask at most 5 targeted questions, each one must include:     
+  (a) why it blocks analysis, (b) what artifact/evidence would resolve it, (c)  
+a suggested default assumption if unanswered.                                   
+- If I don’t answer, proceed with best-effort and mark uncertainty clearly.     
+                                                                                
+CHECKPOINTS                                                                     
+CP1 (after Discovery): only ask questions needed to select the correct          
+session(s) in ~/.claude or to identify how to run/build/test.                   
+CP2 (after PASS 1): only ask questions needed to validate UI-### → BL-###       
+mapping, acceptance criteria, or “definition of done”.                          
+CP3 (during PASS 2 scoring): only ask questions needed to establish an oracle   
+(expected outputs), confirm validation commands, or interpret COBOL quality     
+criteria.                                                                       
+                                                                                
+========================================                                        
+PHASE 0 — DISCOVERY (automatic, factual)                                        
+========================================                                        
+0.1 Identify the project                                                        
+- Determine repo root, project name, primary language(s), entry points, build   
+system, test framewo                                                            
+… +122 lines …                                                                  
+                                                                                
+- compilation status + errors (commands/logs)                                   
+- runtime behavior (if any)                                                     
+- idiomatic indicators (structure, data definitions, I/O, error handling)       
+- toolchain (e.g., GnuCOBOL/cobc version, scripts, CI)                          
+- capability delta over time (only if evidence supports)                        
+                                                                                
+B7) INTERACTION DEMAND ANALYSIS (UII-driven)                                    
+Compute:                                                                        
+- distribution of UI categories + strengths                                     
+- UI density per BL item                                                        
+- clarification cycles (agent question → user answer → resolution)              
+- instruction churn (scope changes per phase)                                   
+Interpret cautiously: which instruction patterns correlate with                 
+stalls/rework/higher quality scores.                                            
+                                                                                
+B8) FACTORS & CLAIMS (light process tracing)                                    
+For major turning points/outcomes, write claims:                                
+- claim                                                                         
+- evidence FOR                                                                  
+- evidence AGAINST / alternative explanation                                    
+- judgment: plausible / likely / uncertain                                      
+                                                                                
+B9) SYNTHESIS + RECOMMENDATIONS + THREATS TO VALIDITY                           
+- strategy patterns & their association with outcomes (carefully)               
+- recommendations to improve future reproducibility/testing/prompt hygiene      
+- threats to validity (missing transcript, minimal git history, manual steps    
+not recorded, etc.)                                                             
+                                                                                
+========================================                                        
+OUTPUT FORMAT (Required)                                                        
+========================================                                        
+Deliver one Markdown report with:                                               
+- Phase 0 Discovery                                                             
+- PASS 1 (A0–A4) + “PASS 1 COMPLETE”                                            
+- PASS 2 (B0–B9)                                                                
+                                                                                
+APPENDIX (Machine-readable, required)                                           
+Output JSON or YAML with:                                                       
+- session_metadata (repo path, selected session file(s), commit hash,           
+timestamps)                                                                     
+- user_instruction_index (UI-###)                                               
+- backlog_items (BL-###)                                                        
+- replay_plan                                                                   
+- rq_coverage_matrix                                                            
+- strategy_codebook                                                             
+- episodes                                                                      
+- per_bl_strategy_annotations                                                   
+- per_bl_rubric_scores + confidence                                             
+- interaction_metrics                                                           
+- cobol_panel (if applicable)                                                   
+- claims_process_tracing                                                        
+- threats_to_validity                                                           
+- open_questions (asked at CP1–CP3) + defaults used if unanswered               
+                                                                                
+========================================                                        
+WHAT I MAY NEED FROM YOU (ONLY IF BLOCKING; ASK AT CP2/CP3)                     
+========================================                                        
+If needed, request:                                                             
+1) Oracle / expected behavior: 3–10 input→output scenarios per key feature (or  
+where tests should pass).                                                       
+2) The “golden” validation command(s): what you consider the correct            
+run/build/test command(s).                                                      
+3) Non-negotiable constraints that may not be explicit in logs (offline, deps,  
+perf, style).                                                                   
+4) COBOL quality criteria/toolchain expectations (if COBOL is involved).        
+                                                                                
+NOW START                                                                       
+Begin with PHASE 0 Discovery and proceed through PASS 1 then PASS 2, using      
+checkpoints CP1–CP3 for minimal clarifications only when necessary.             
+
+⏺ Starting Phase 0 — Discovery. Let me gather all evidence in parallel.
+
+⏺ Bash(git log --oneline --all --decorate 2>/dev/null | head -30)
+  ⎿  dc71e86 (HEAD -> master, origin/master) Add Game of 15 COBOL programs:
+      counter, optimal play tree, and variant generator
+
+⏺ Bash(git remote -v 2>/dev/null; echo "---"; git branch -a 2>/dev/null)
+  ⎿  origin     https://github.com/acherm/agentic-cobol-game15tictactoe.git
+     (fe
+     tch)
+     origin     https://github.com/acherm/agentic-cobol-game15tictactoe.git
+     (pu
+     … +4 lines (ctrl+o to expand)
+
+  Searched for 1 pattern, read 2 files (ctrl+o to expand)
+
+⏺ Bash(git log --format="%H %ai %s" --all 2>/dev/null)
+  ⎿  dc71e86cc09f230a0f088b411efefd8f98e93890 2026-03-19 10:40:17 +0100 Add
+      Game of 15 COBOL programs: counter, optimal play tree, and variant ge
+     nerator
+
+  Searched for 2 patterns, read 2 files (ctrl+o to expand)
+
+⏺ Good. Two sessions found. The larger one (f44c590a, 2.3MB, 324 lines) is
+  likely the main dev session. The smaller one (b0823094, 51KB, 31 lines) is
+  likely this current analysis session. Let me examine the development session
+  and all source files in parallel.
+
+⏺ Agent(Parse main Claude session log)
+  ⎿  Done (14 tool uses · 49.7k tokens · 9m 15s)
+  (ctrl+o to expand)
+
+  Read 5 files (ctrl+o to expand)
+
+⏺ Now let me verify the programs compile and run to create my own evidence
+  pointers.
+
+⏺ Bash(cobc --version 2>&1 | head -3)
+  ⎿  cobc (GnuCOBOL) 3.2.0
+     Copyright (C) 2023 Free Software Foundation, Inc.
+     License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/g
+     pl.html>
+
+⏺ Bash(cobc -x -o game15_verify game15.cob 2>&1)
+  ⎿  (No output)
+
+⏺ Bash(cobc -x -o game15tree_verify game15tree.cob 2>&1)
+  ⎿  (No output)
+
+⏺ Bash(cobc -x -o game015_verify game015.cob 2>&1)
+  ⎿  (No output)
+
+⏺ Bash(cobc -x -o game015tree_verify game015tree.cob 2>&1)
+  ⎿  (No output)
+
+⏺ Bash(cobc -x -o gameN_verify gameN.cob 2>&1)
+  ⎿  (No output)
+
+⏺ All 5 programs compile cleanly. Now let me run them.
+
+⏺ Bash(./game15_verify 2>&1)
+  ⎿  Game of 15 - Possible Games
+     ===========================
+     Player 1 wins:   131184
+     … +3 lines (ctrl+o to expand)
+
+⏺ Bash(./game15_verify --unique 2>&1)
+  ⎿  Game of 15 - Possible Games
+     ===========================
+     Player 1 wins:   131184
+     … +10 lines (ctrl+o to expand)
+
+⏺ Bash(./game15tree_verify --depth 2 2>&1)
+  ⎿  Game of 15 - Optimal Play Tree [Draw]
+     |-- P1:1 [Draw]
+     |   avoid: 2, 3, 4, 7
+     … +34 lines (ctrl+o to expand)
+
+⏺ Bash(./game15tree_verify 2>&1 | wc -l && ./game15tree_verify 2>&1 | grep -c
+      '\*' && ./game15tree_verify 2>&1 | grep -c 'P1 wins\|P2 wins')
+  ⎿  15303
+     3584
+     0
+
+⏺ Bash(./game015_verify 2>&1)
+  ⎿  Game of 0.15 - Possible Games
+     =============================
+     Player 1 wins:   131184
+     … +3 lines (ctrl+o to expand)
+
+⏺ Bash(./game015tree_verify --depth 2 2>&1)
+  ⎿  Game of 0.15 - Optimal Play Tree [Draw]
+     |--- P1:0.01 [Draw]
+     |    avoid: 0.02, 0.03, 0.04, 0.07
+     … +25 lines (ctrl+o to expand)
+
+⏺ Bash(./gameN_verify 15 9 2>&1)
+  ⎿  =========================================
+       The Game of 15
+     =========================================
+     … +35 lines (ctrl+o to expand)
+
+⏺ Bash(./gameN_verify 12 8 2>&1)
+  ⎿  =========================================
+       The Game of 12
+     =========================================
+     … +28 lines (ctrl+o to expand)
+
+⏺ Bash(./gameN_verify 10 7 2>&1)
+  ⎿  =========================================
+       The Game of 10
+     =========================================
+     … +26 lines (ctrl+o to expand)
+
+⏺ Bash(./gameN_verify 2>&1)
+  ⎿  Usage: ./gameN <target> [<max-number>]
+
+       target      integer sum to win
+     … +6 lines (ctrl+o to expand)
+
+⏺ All verified. Let me clean up my verification binaries.
+
+⏺ Bash(rm -f game15_verify game15tree_verify game015_verify game015tree_verify
+      gameN_verify)
+  ⎿  Done
+
+⏺ I have all the evidence needed. No checkpoint questions are blocking —
+  proceeding directly through the full report.
+
+  ---
+  POST-SESSION BACKLOG & STRATEGY ANALYSIS REPORT
+
+  PHASE 0 — DISCOVERY
+
+  0.1 Project Identification
+
+  ┌────────┬──────────────────────────────────────────────┬─────────────────┐
+  │ Field  │                    Value                     │    Evidence     │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Repo   │ /Users/mathieuacher/SANDBOX/cobol-tictactoe  │ working         │
+  │ root   │                                              │ directory       │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Projec │                                              │ [G:commit       │
+  │ t name │ agentic-cobol-game15tictactoe                │ dc71e86],       │
+  │        │                                              │ GitHub remote   │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Remote │ https://github.com/acherm/agentic-cobol-game │ git remote -v   │
+  │  URL   │ 15tictactoe.git                              │                 │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Primar │                                              │ [R:game15.cob:1 │
+  │ y lang │ COBOL (GnuCOBOL 3.2.0)                       │ -2], [L:run_cob │
+  │ uage   │                                              │ c_version]      │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Entry  │ 5 programs: game15, game015, game15tree,     │ [R:.gitignore:1 │
+  │ points │ game015tree, gameN                           │ -5]             │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Build  │ Manual cobc -x compilation, no Makefile/CI   │ [T:session f44c │
+  │ system │                                              │ 590a:msg_007]   │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Test   │ None (manual validation via execution +      │ session-wide    │
+  │ framew │ output inspection)                           │ observation     │
+  │ ork    │                                              │                 │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ CI con │ None                                         │ repo scan       │
+  │ figs   │                                              │                 │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Branch │ master (single branch)                       │ git branch -a   │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ HEAD   │ dc71e86                                      │ git log         │
+  ├────────┼──────────────────────────────────────────────┼─────────────────┤
+  │ Total  │                                              │                 │
+  │ commit │ 1                                            │ git log --all   │
+  │  count │                                              │                 │
+  └────────┴──────────────────────────────────────────────┴─────────────────┘
+
+  0.2 Claude Session Selection
+
+  ┌───────────┬───────┬───────┬────────────────────────────────────────────┐
+  │ Session   │ Lines │ Size  │                 Relevance                  │
+  │    ID     │       │       │                                            │
+  ├───────────┼───────┼───────┼────────────────────────────────────────────┤
+  │ f44c590a  │ 324   │ 2.3   │ Primary development session — all code     │
+  │           │       │ MB    │ written here                               │
+  ├───────────┼───────┼───────┼────────────────────────────────────────────┤
+  │ b0823094  │ 31    │ 51 KB │ Current analysis session (this             │
+  │           │       │       │ conversation)                              │
+  └───────────┴───────┴───────┴────────────────────────────────────────────┘
+
+  Selected session: f44c590a-7e53-4bbd-8c28-04f5b86c98fa
+  Criteria: Only session containing development work; contains all 9 user
+  messages, all code creation, all compilation/runs.
+
+  0.3 Candidate Milestones (chronological)
+
+  ┌─────┬──────────────┬─────────────────────────┬──────────────────────────┐
+  │  #  │  Timestamp   │        Milestone        │         Evidence         │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-12   │ User requests Game of   │                          │
+  │ M1  │ 19:52        │ 15 game counter in      │ [T:f44c590a:msg_003]     │
+  │     │              │ COBOL                   │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-12   │ First program compiles  │                          │
+  │ M2  │ 19:59        │ and runs (255,168       │ [T:f44c590a:msg_007-008] │
+  │     │              │ games)                  │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-12   │ --unique flag added     │                          │
+  │ M3  │ 20:06        │ with D4 symmetry dedup  │ [T:f44c590a:msg_011-014] │
+  │     │              │ (31,896 unique)         │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M4  │ 2026-03-12   │ User requests optimal   │ [T:f44c590a:msg_015]     │
+  │     │ 20:07        │ play ASCII tree         │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M5  │ 2026-03-12   │ game15tree.cob written  │ [T:f44c590a:msg_018]     │
+  │     │ 20:48        │ (minimax + ASCII tree)  │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M6  │ 2026-03-12   │ Bug: move numbers show  │ [T:f44c590a:msg_020-021] │
+  │     │ 20:50        │ "0" — fixed             │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-12   │ Tree verified: 12,133   │                          │
+  │ M7  │ 20:56        │ nodes, 3,584 draws, 0   │ [T:f44c590a:msg_022]     │
+  │     │              │ wins                    │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M8  │ 2026-03-12   │ User requests "avoid"   │ [T:f44c590a:msg_024]     │
+  │     │ 20:58        │ annotations             │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │              │ Avoid feature added;    │                          │
+  │ M9  │ 2026-03-12   │ bug found + fixed       │ [T:f44c590a:msg_025]     │
+  │     │ 21:04        │ (COLLECT-OPTIMAL        │                          │
+  │     │              │ corruption)             │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M10 │ 2026-03-12   │ Avoid feature verified: │ [T:f44c590a:msg_026]     │
+  │     │ 21:19        │  15,303 lines, no bugs  │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M11 │ 2026-03-13   │ User requests Game of   │ [T:f44c590a:msg_027]     │
+  │     │ 07:16        │ 0.15 adaptation         │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-13   │ game015.cob +           │                          │
+  │ M12 │ 07:22        │ game015tree.cob created │ [T:f44c590a:msg_028]     │
+  │     │              │  and verified           │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │              │ User requests variant   │                          │
+  │ M13 │ 2026-03-13   │ generator               │ [T:f44c590a:msg_029]     │
+  │     │ 07:24        │ (parameterized Game of  │                          │
+  │     │              │ N)                      │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-13   │ Context overflow —      │                          │
+  │ M14 │ ~07:35       │ session auto-continued  │ [T:f44c590a:msg_030-031] │
+  │     │              │ with summary            │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-13   │ Two "continue" messages │                          │
+  │ M15 │ 08:48–09:30  │  needed due to output   │ [T:f44c590a:msg_033-035] │
+  │     │              │ token limit             │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │     │ 2026-03-13   │ gameN.cob written,      │                          │
+  │ M16 │ 09:50        │ compiled, tested with   │ [T:f44c590a:msg_036-037] │
+  │     │              │ multiple variants       │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M17 │ 2026-03-19   │ User requests git init  │ [T:f44c590a:msg_038-039] │
+  │     │ 09:40        │ + commit                │                          │
+  ├─────┼──────────────┼─────────────────────────┼──────────────────────────┤
+  │ M18 │ 2026-03-19   │ User requests GitHub    │ [T:f44c590a:msg_040-041] │
+  │     │ 09:41        │ push                    │                          │
+  └─────┴──────────────┴─────────────────────────┴──────────────────────────┘
+
+  CP1: No questions needed. Session selection is unambiguous. Build/test
+  commands are clear from transcript and confirmed via independent verification
+  [L:run_1–10].
+
+  ---
+  PASS 1 — EXTRACTION (Reproducible Backlog)
+
+  A0) USER INSTRUCTION INDEX (UII)
+
+  UI-ID: UI-001
+  Evidence: [T:f44c590a:msg_003]
+  Quote / Paraphrase: "Write a COBOL program (using GNUCobol) that computes the
+    number of possible games in the Game of 15"
+  Category: FeatureRequest
+  Strength: Explicit imperative
+  Target Surface: Code + Runtime behavior
+  Mapped BL: BL-001
+  ────────────────────────────────────────
+  UI-ID: UI-002
+  Evidence: [T:f44c590a:msg_010]
+  Quote / Paraphrase: "add a flag to compute numbers without duplicates"
+  Category: FeatureRequest
+  Strength: Explicit imperative
+  Target Surface: Code + Runtime behavior
+  Mapped BL: BL-002
+  ────────────────────────────────────────
+  UI-ID: UI-003
+  Evidence: [T:f44c590a:msg_015]
+  Quote / Paraphrase: "I am interested to depict a tree (in ASCII format) of all
+
+    possible moves and the outcome (under optimal play)"
+  Category: FeatureRequest
+  Strength: Explicit imperative
+  Target Surface: Code + Runtime behavior
+  Mapped BL: BL-003
+  ────────────────────────────────────────
+  UI-ID: UI-004
+  Evidence: [T:f44c590a:msg_024]
+  Quote / Paraphrase: "given a sequence of moves/choices, there are (1)
+  follow-up
+    choice to NOT perform (otherwise you lose); (2) follow-up choice you can
+    make"
+  Category: FeatureRequest
+  Strength: Suggestion
+  Target Surface: Code + Runtime behavior
+  Mapped BL: BL-004
+  ────────────────────────────────────────
+  UI-ID: UI-005
+  Evidence: [T:f44c590a:msg_027]
+  Quote / Paraphrase: "The game of 0.15 is defined as follows [...] Please adapt
+
+    your program to count the number of games, as well as the tree"
+  Category: FeatureRequest
+  Strength: Explicit imperative
+  Target Surface: Code + Runtime behavior
+  Mapped BL: BL-005
+  ────────────────────────────────────────
+  UI-ID: UI-006
+  Evidence: [T:f44c590a:msg_029]
+  Quote / Paraphrase: "Provide a generator that 'invents' a variant of the game
+    of N=15 by changing N [...] Please recap the rules of the game of N after"
+  Category: FeatureRequest
+  Strength: Explicit imperative
+  Target Surface: Code + Runtime behavior
+  Mapped BL: BL-006
+  ────────────────────────────────────────
+  UI-ID: UI-007
+  Evidence: [T:f44c590a:msg_033]
+  Quote / Paraphrase: "continue" (after context overflow)
+  Category: Meta
+  Strength: Explicit imperative
+  Target Surface: Code
+  Mapped BL: BL-006
+  ────────────────────────────────────────
+  UI-ID: UI-008
+  Evidence: [T:f44c590a:msg_035]
+  Quote / Paraphrase: "continue" (after token limit)
+  Category: Meta
+  Strength: Explicit imperative
+  Target Surface: Code
+  Mapped BL: BL-006
+  ────────────────────────────────────────
+  UI-ID: UI-009
+  Evidence: [T:f44c590a:msg_038]
+  Quote / Paraphrase: "create a git and commit"
+  Category: Tooling/Build
+  Strength: Explicit imperative
+  Target Surface: Repo structure
+  Mapped BL: BL-007
+  ────────────────────────────────────────
+  UI-ID: UI-010
+  Evidence: [T:f44c590a:msg_040]
+  Quote / Paraphrase: "please push on Github and repo
+    agentic-cobol-game15tictactoe"
+  Category: Tooling/Build
+  Strength: Explicit imperative
+  Target Surface: Repo structure
+  Mapped BL: BL-008
+
+  UI category distribution: FeatureRequest: 6, Meta: 2, Tooling/Build: 2
+  UI strength distribution: Explicit imperative: 9, Suggestion: 1
+  Unmapped UIs: None. All map to BL items.
+
+  A1) Session Overview
+
+  One-liner: A Claude Code session that implemented five COBOL programs for the
+  "Game of 15" (a combinatorial game isomorphic to tic-tac-toe): a game counter,
+   a symmetry-deduplicated counter, a minimax optimal play tree with avoid
+  annotations, a scaled "Game of 0.15" variant, and a parameterized variant
+  generator.
+
+  Timeline: See milestones M1–M18 in Phase 0.3.
+
+  Artifact Inventory:
+
+  File: game15.cob
+  Lines: 252
+  Size: 9,580 B
+  Description: Game counter with --unique flag (D4 symmetry dedup)
+  Evidence: [R:game15.cob:1-252]
+  ────────────────────────────────────────
+  File: game15tree.cob
+  Lines: 558
+  Size: ~19 KB
+  Description: Minimax ASCII tree with avoid annotations
+  Evidence: [R:game15tree.cob:1-558]
+  ────────────────────────────────────────
+  File: game015.cob
+  Lines: 242
+  Size: 9,083 B
+  Description: Game of 0.15 counter (display variant)
+  Evidence: [R:game015.cob:1-242]
+  ────────────────────────────────────────
+  File: game015tree.cob
+  Lines: 532
+  Size: 18,181 B
+  Description: Game of 0.15 tree (display variant)
+  Evidence: [R:game015tree.cob:1-532]
+  ────────────────────────────────────────
+  File: gameN.cob
+  Lines: 340
+  Size: 11,836 B
+  Description: Parameterized variant generator
+  Evidence: [R:gameN.cob:1-340]
+  ────────────────────────────────────────
+  File: .gitignore
+  Lines: 5
+  Size: 44 B
+  Description: Compiled binary exclusions
+  Evidence: [R:.gitignore:1-5]
+
+  How to build/test (verified):
+  cobc -x -o game15 game15.cob        # [L:run_1]
+  cobc -x -o game15tree game15tree.cob # [L:run_2]
+  cobc -x -o game015 game015.cob      # [L:run_3]
+  cobc -x -o game015tree game015tree.cob # [L:run_4]
+  cobc -x -o gameN gameN.cob          # [L:run_5]
+  ./game15                             # [L:run_6]
+  ./game15 --unique                    # [L:run_7]
+  ./game15tree --depth 2               # [L:run_8]
+  ./gameN 15 9                         # [L:run_12]
+
+  A2) EX-POST BACKLOG
+
+  ---
+  BL-001: Game of 15 Counter
+
+  ┌──────────────────┬──────────────────────────────────────────────────────┐
+  │      Field       │                        Value                         │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Type             │ Feature                                              │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Source UIs       │ UI-001                                               │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ User intent      │ Count all possible games in the Game of 15,          │
+  │                  │ categorized by P1 wins/P2 wins/draws                 │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Acceptance       │ [Explicit] COBOL program using GnuCOBOL; counts all  │
+  │ criteria         │ games; reports win/draw breakdown                    │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │                  │ Iterative DFS with backtracking; 8 hardcoded winning │
+  │ Implementation   │  triples (magic square encoding); determines player  │
+  │                  │ by depth parity                                      │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Evidence         │ [R:game15.cob:1-252], [T:f44c590a:msg_006-009]       │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Subtasks         │ (1) Write DFS engine, (2) Compile, (3) Verify output │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Dependencies     │ GnuCOBOL 3.2.0 installed                             │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Validation       │ ./game15 → P1=131,184, P2=77,904, Draws=46,080,      │
+  │                  │ Total=255,168 [L:run_6]                              │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ DoD              │ Yes — program compiles, runs, produces correct       │
+  │                  │ counts matching known mathematical result            │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Reproducibility  │ Requires cobc (GnuCOBOL 3.2.0). Single               │
+  │                  │ self-contained file.                                 │
+  └──────────────────┴──────────────────────────────────────────────────────┘
+
+  ---
+  BL-002: Symmetry Deduplication (--unique flag)
+
+  Field: Type
+  Value: Feature
+  ────────────────────────────────────────
+  Field: Source UIs
+  Value: UI-002
+  ────────────────────────────────────────
+  Field: User intent
+  Value: Count games modulo board symmetry (eliminate duplicates under D4
+    dihedral group)
+  ────────────────────────────────────────
+  Field: Acceptance criteria
+  Value: [Explicit] --unique flag on game15; [INFERRED] canonical form check
+    using magic square symmetries
+  ────────────────────────────────────────
+  Field: Implementation
+  Value: Added SYM-TABLE (8 rows of 9 permutations mapping D4 symmetries on the
+    3x3 magic square); CHECK-CANONICAL paragraph compares game sequence against
+    all 8 symmetric images; counts only lexicographically smallest
+  ────────────────────────────────────────
+  Field: Evidence
+  Value: [R:game15.cob:80-97] (SYM-TABLE), [R:game15.cob:232-251]
+    (CHECK-CANONICAL), [T:f44c590a:msg_011-014]
+  ────────────────────────────────────────
+  Field: Subtasks
+  Value: (1) Add CLI parsing, (2) Encode D4 symmetries, (3) Implement canonical
+    check, (4) Rewrite file
+  ────────────────────────────────────────
+  Field: Dependencies
+  Value: BL-001
+  ────────────────────────────────────────
+  Field: Validation
+  Value: ./game15 --unique → Unique=31,896 (P1=16,398, P2=9,738, Draws=5,760)
+    [L:run_7]
+  ────────────────────────────────────────
+  Field: DoD
+  Value: Yes — both modes work, output verified
+  ────────────────────────────────────────
+  Field: Reproducibility
+  Value: Same binary, new flag. game15.cob was fully rewritten (not incremental
+    edit).
+
+  ---
+  BL-003: Optimal Play Tree (Minimax + ASCII)
+
+  Field: Type
+  Value: Feature
+  ────────────────────────────────────────
+  Field: Source UIs
+  Value: UI-003
+  ────────────────────────────────────────
+  Field: User intent
+  Value: ASCII tree showing all optimal moves (minimax), as a strategy guide
+  ────────────────────────────────────────
+  Field: Acceptance criteria
+  Value: [Explicit] ASCII tree format; optimal play only; useful for knowing
+    "what to play after a sequence"
+  ────────────────────────────────────────
+  Field: Implementation
+  Value: Two-pass architecture: Pass 1 = iterative minimax with memoization
+    (base-3 position key, 19,683 entries); Pass 2 = DFS traversal printing only
+    moves whose value equals parent's minimax value. Tree connectors (`
+  ────────────────────────────────────────
+  Field: Evidence
+  Value: [R:game15tree.cob:1-558], [T:f44c590a:msg_016-023]
+  ────────────────────────────────────────
+  Field: Subtasks
+  Value: (1) Design 2-pass architecture, (2) Implement minimax with memo, (3)
+    Implement tree printer, (4) Fix display bug (PIC 99 → PIC 9), (5) Verify
+  full
+     tree
+  ────────────────────────────────────────
+  Field: Dependencies
+  Value: BL-001 (shares game logic concepts)
+  ────────────────────────────────────────
+  Field: Validation
+  Value: Full tree: 15,303 lines, 3,584 terminal draws, 0 wins under optimal
+  play
+    [L:run_9]; depth-limited mode works [L:run_8]
+  ────────────────────────────────────────
+  Field: DoD
+  Value: Yes — tree correct, verified at multiple depths
+  ────────────────────────────────────────
+  Field: Bugs encountered
+  Value: Bug 1: CUR-NUM PIC 99 → moving "01" to single-char field showed "0".
+    Fixed with DISP-DIGIT PIC 9. [T:f44c590a:msg_020-021]
+  ────────────────────────────────────────
+  Field: Reproducibility
+  Value: New file game15tree.cob. --depth N flag for depth-limited output.
+
+  ---
+  BL-004: Avoid Annotations
+
+  ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      Field      │                         Value                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Type            │ Feature                                               │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Source UIs      │ UI-004                                                │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ User intent     │ At each decision point, show which moves to avoid     │
+  │                 │ (leading to loss) vs. which are safe                  │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Acceptance      │ [Explicit] Distinguish "avoid" moves from playable    │
+  │ criteria        │ moves; [INFERRED] "avoid:" line before branches at    │
+  │                 │ each node                                             │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ Added BAD-TABLE data structure; modified              │
+  │ Implementation  │ COLLECT-OPTIMAL to classify moves into optimal vs.    │
+  │                 │ bad; added PRINT-AVOID paragraph; bug fix: CUR-NUM    │
+  │                 │ corruption in COLLECT-OPTIMAL loop.                   │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ [R:game15tree.cob:76-79] (BAD-TABLE),                 │
+  │ Evidence        │ [R:game15tree.cob:388-443] (COLLECT-OPTIMAL with dual │
+  │                 │  classification), [R:game15tree.cob:513-545]          │
+  │                 │ (PRINT-AVOID), [T:f44c590a:msg_024-026]               │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Subtasks        │ (1) Add BAD-TABLE, (2) Modify COLLECT-OPTIMAL, (3)    │
+  │                 │ Add PRINT-AVOID, (4) Fix CUR-NUM corruption bug       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Dependencies    │ BL-003                                                │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Validation      │ `./game15tree                                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ DoD             │ Yes — feature works, no residual bugs                 │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ Bug 2: COLLECT-OPTIMAL loop uses MOVE TRIAL-NUM TO    │
+  │ Bugs            │ CUR-NUM, then undo MOVE 0 TO OWNER(CUR-NUM) freed     │
+  │ encountered     │ wrong number. Fixed by using OWNER(CHOSEN(DEPTH)).    │
+  │                 │ [T:f44c590a:msg_025]                                  │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Reproducibility │ Modifications to game15tree.cob.                      │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  ---
+  BL-005: Game of 0.15 Variant
+
+  ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      Field      │                         Value                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Type            │ Feature                                               │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Source UIs      │ UI-005                                                │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ User intent     │ Adapt both programs for a "Game of 0.15" with numbers │
+  │                 │  0.01–0.09 summing to 0.15                            │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Acceptance      │ [Explicit] Counter + tree programs for Game of 0.15;  │
+  │ criteria        │ same results (mathematically equivalent)              │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ Two new files with display-only changes: internal     │
+  │ Implementation  │ integers 1–9 mapped to "0.0X" format in output.       │
+  │                 │ Counter: game015.cob; Tree: game015tree.cob. Tree     │
+  │                 │ uses 5-char spacing (vs. 4) for wider "0.0X" labels.  │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Evidence        │ [R:game015.cob:1-242], [R:game015tree.cob:1-532],     │
+  │                 │ [T:f44c590a:msg_027-028]                              │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ (1) Create game015.cob from game15.cob, (2) Create    │
+  │ Subtasks        │ game015tree.cob from game15tree.cob, (3) Compile      │
+  │                 │ both, (4) Verify identical results                    │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Dependencies    │ BL-001, BL-002 (counter), BL-003, BL-004 (tree)       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ ./game015 → 255,168 total (identical) [L:run_10];     │
+  │ Validation      │ ./game015tree --depth 2 shows "0.0X" format           │
+  │                 │ [L:run_11]                                            │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ DoD             │ Yes — both programs work, output format correct       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Reproducibility │ Two new files. No new logic, only display changes.    │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  ---
+  BL-006: Parameterized Variant Generator (gameN)
+
+  Field: Type
+  Value: Feature
+  ────────────────────────────────────────
+  Field: Source UIs
+  Value: UI-006, UI-007, UI-008
+  ────────────────────────────────────────
+  Field: User intent
+  Value: Generator that defines a variant game by changing target sum N and
+    number range; displays rules and counts games
+  ────────────────────────────────────────
+  Field: Acceptance criteria
+  Value: [Explicit] Accepts target sum and max number as parameters;
+  auto-derives
+    range if omitted; recaps rules; generates winning triples dynamically;
+  counts
+     all games
+  ────────────────────────────────────────
+  Field: Implementation
+  Value: Dynamic triple generation via nested loops; parameterized DFS
+    (OWNER-TABLE up to 15, TRIPLE-TABLE up to 84); usage message; input
+    validation; auto-derive formula K = T - 3, capped [3,15]; commentary on game
+
+    character based on triple count.
+  ────────────────────────────────────────
+  Field: Evidence
+  Value: [R:gameN.cob:1-340], [T:f44c590a:msg_029-037]
+  ────────────────────────────────────────
+  Field: Subtasks
+  Value: (1) Design parameterized data structures, (2) Implement PARSE-ARGS, (3)
+
+    Implement GENERATE-TRIPLES, (4) Implement DISPLAY-RULES, (5) Adapt DFS-STEP
+    for variable MAX-NUM, (6) Test with multiple variants
+  ────────────────────────────────────────
+  Field: Dependencies
+  Value: BL-001 (game logic pattern)
+  ────────────────────────────────────────
+  Field: Validation
+  Value: ./gameN 15 9 → 255,168 [L:run_12]; ./gameN 12 8 → 34,704 [L:run_13];
+    ./gameN 10 7 → 4,752 [L:run_14]; usage message works [L:run_15]
+  ────────────────────────────────────────
+  Field: DoD
+  Value: Yes — compiles, runs with multiple inputs, produces consistent results
+  ────────────────────────────────────────
+  Field: Blockers encountered
+  Value: Context overflow [M14], two output token limit errors [M15] requiring
+    three attempts
+  ────────────────────────────────────────
+  Field: Reproducibility
+  Value: New file gameN.cob. Note: enumeration capped at max-number <= 9 for
+    performance [R:gameN.cob:83].
+
+  ---
+  BL-007: Git Repository Setup
+
+  ┌────────────────┬─────────────────────────────────────────────────────────┐
+  │     Field      │                          Value                          │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ Type           │ Chore                                                   │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ Source UIs     │ UI-009                                                  │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ User intent    │ Initialize git repo and commit source files             │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ Implementation │ git init, .gitignore for binaries, staged 5 .cob files  │
+  │                │ + .gitignore, single commit                             │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ Evidence       │ [G:commit dc71e86], [T:f44c590a:msg_038-039]            │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ Validation     │ git status → clean working tree [T:f44c590a:msg_039]    │
+  ├────────────────┼─────────────────────────────────────────────────────────┤
+  │ DoD            │ Yes                                                     │
+  └────────────────┴─────────────────────────────────────────────────────────┘
+
+  ---
+  BL-008: GitHub Push
+
+  ┌───────────────┬─────────────────────────────────────────────────────────┐
+  │     Field     │                          Value                          │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ Type          │ Chore                                                   │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ Source UIs    │ UI-010                                                  │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ User intent   │ Push to GitHub under specific repo name                 │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ Implementatio │ gh repo create agentic-cobol-game15tictactoe --public   │
+  │ n             │ --source=. --push                                       │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ Evidence      │ [T:f44c590a:msg_040-041], git remote -v confirms remote │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ Validation    │ Remote set to https://github.com/acherm/agentic-cobol-g │
+  │               │ ame15tictactoe.git                                      │
+  ├───────────────┼─────────────────────────────────────────────────────────┤
+  │ DoD           │ Yes                                                     │
+  └───────────────┴─────────────────────────────────────────────────────────┘
+
+  ---
+  A3) Backlog Map + Neutral Taxonomy
+
+  Structure (flat — no explicit epics):
+
+  BL-001 Game counter (Feature/impl)
+    └── BL-002 Symmetry dedup (Feature/impl) ← extends BL-001
+  BL-003 Optimal play tree (Feature/impl)
+    └── BL-004 Avoid annotations (Feature/impl) ← extends BL-003
+  BL-005 Game of 0.15 (Feature/impl) ← clones BL-001+BL-002+BL-003+BL-004
+  BL-006 Variant generator (Feature/impl) ← generalizes BL-001
+  BL-007 Git setup (Chore/setup)
+  BL-008 GitHub push (Chore/setup)
+
+  Counts by taxonomy:
+
+  ┌──────────────────┬─────────────────────────────────┐
+  │     Category     │              Count              │
+  ├──────────────────┼─────────────────────────────────┤
+  │ Feature/impl     │ 6                               │
+  ├──────────────────┼─────────────────────────────────┤
+  │ Chore/setup      │ 2                               │
+  ├──────────────────┼─────────────────────────────────┤
+  │ Debug (subtasks) │ 2 bugs across BL-003 and BL-004 │
+  ├──────────────────┼─────────────────────────────────┤
+  │ Refactor         │ 0                               │
+  ├──────────────────┼─────────────────────────────────┤
+  │ Test             │ 0 (all validation is manual)    │
+  ├──────────────────┼─────────────────────────────────┤
+  │ Documentation    │ 0                               │
+  └──────────────────┴─────────────────────────────────┘
+
+  A4) Replay Package
+
+  BL-001 Replay
+
+  - Preconditions: GnuCOBOL 3.2.0, empty directory
+  - Minimal replay prompt: "Write a COBOL program (using GnuCOBOL) that computes
+   the number of possible games in the Game of 15. Two players in turn say a 
+  number between 1 and 9. No repeats. Win by three numbers summing to 15. 
+  Otherwise draw. Report P1 wins, P2 wins, draws, total."
+  - Expected output: P1=131,184; P2=77,904; Draws=46,080; Total=255,168
+  - Validation: cobc -x -o game15 game15.cob && ./game15
+  - Checkpoint: File game15.cob exists, compiles, produces correct counts
+
+  BL-002 Replay
+
+  - Preconditions: BL-001 complete
+  - Minimal replay prompt: "Add a --unique flag to compute game counts without 
+  duplicates (modulo board symmetry). The Game of 15 is isomorphic to 
+  tic-tac-toe; use the D4 dihedral group (8 symmetries of the magic square) to 
+  deduplicate."
+  - Expected output: Unique total=31,896
+  - Validation: cobc -x -o game15 game15.cob && ./game15 --unique
+
+  BL-003 Replay
+
+  - Preconditions: BL-001 concepts
+  - Minimal replay prompt: "Write a COBOL program that displays an ASCII tree of
+   all possible moves under optimal play (minimax) in the Game of 15. Use 
+  memoization. The tree should show only optimal moves at each node with proper 
+  tree connectors."
+  - Expected output: 12,133+ nodes, all draws, 0 wins under optimal play
+  - Validation: cobc -x -o game15tree game15tree.cob && ./game15tree --depth 2
+
+  BL-004 Replay
+
+  - Preconditions: BL-003 complete
+  - Minimal replay prompt: "Add 'avoid' annotations to the tree. At each 
+  decision point, show which moves to avoid (they lead to losing) before showing
+   the safe/optimal branches."
+  - Expected output: "avoid:" lines appear before branches; tree grows to
+  ~15,303 lines
+  - Validation: ./game15tree | grep 'avoid:' | head -5
+
+  BL-005 Replay
+
+  - Preconditions: BL-001+BL-004 complete
+  - Minimal replay prompt: "Adapt both programs (counter and tree) for a 'Game 
+  of 0.15' where players choose from 0.01–0.09. This is mathematically identical
+   but display should show '0.0X' format."
+  - Expected output: Same counts; display shows "P1:0.05" format
+  - Validation: cobc -x -o game015 game015.cob && ./game015
+
+  BL-006 Replay
+
+  - Preconditions: BL-001 pattern
+  - Minimal replay prompt: "Create a parameterized COBOL program that accepts a 
+  target sum and optional max-number, dynamically generates winning triples, 
+  displays game rules, and counts all possible games. Usage: ./gameN 15 9. 
+  Support auto-deriving the range. Validate inputs."
+  - Expected output: ./gameN 15 9 → 255,168; ./gameN 12 8 → 34,704
+  - Validation: cobc -x -o gameN gameN.cob && ./gameN 15 9
+
+  BL-007 + BL-008 Replay
+
+  - Prompt: "Initialize a git repository, create .gitignore for binaries, commit
+   the .cob source files, and push to GitHub as 
+  'agentic-cobol-game15tictactoe'."
+  - Checkpoint: [G:commit dc71e86]
+
+  ---
+  PASS 1 COMPLETE
+
+  Missing/ambiguous evidence limiting reproducibility:
+  1. No automated test suite — all validation was manual output inspection
+  2. No Makefile or build script — compilation is ad-hoc cobc commands
+  3. Single commit squashes all development into one snapshot — no per-feature
+  commit history
+  4. No formal acceptance criteria were stated by the user; all criteria are
+  reconstructed from instructions
+  5. Context overflow at M14 means some assistant reasoning during BL-006 was
+  lost from transcript
+  6. Two output token limit errors (M15) — the first two attempts at generating
+  gameN.cob were truncated and lost
+
+  CP2: No questions needed. UI→BL mapping is unambiguous. All features were
+  accepted by the user proceeding to the next request without complaints.
+
+  ---
+  PASS 2 — INTERPRETATION
+
+  B0) RQ COVERAGE MATRIX
+
+  ┌─────────────────────┬────────────────┬──────────────────────┬──────────┐
+  │         RQ          │   Evidence     │  Indicators/Metrics  │ Output   │
+  │                     │    Sources     │                      │ Sections │
+  ├─────────────────────┼────────────────┼──────────────────────┼──────────┤
+  │ RQ1 (What was       │ Repo files,    │ Artifact inventory,  │ A0–A4    │
+  │ built?)             │ transcript,    │ BL items             │ (PASS 1) │
+  │                     │ git            │                      │          │
+  ├─────────────────────┼────────────────┼──────────────────────┼──────────┤
+  │ RQ2 (Coding         │ Transcript msg │ Strategy codes,      │ B2, B3,  │
+  │ strategies?)        │  sequences,    │ episode sequences,   │ B4       │
+  │                     │ tool calls     │ loop counts          │          │
+  ├─────────────────────┼────────────────┼──────────────────────┼──────────┤
+  │                     │ Compilation    │ Rubric scores        │          │
+  │ RQ3                 │ logs, run      │ (Q1–Q6), build/run   │ B5, B6   │
+  │ (Outcomes/quality?) │ outputs, repo  │ success              │          │
+  │                     │ files          │                      │          │
+  ├─────────────────────┼────────────────┼──────────────────────┼──────────┤
+  │                     │ Transcript     │                      │          │
+  │ RQ4 (Contributing   │ turning        │ Claims with evidence │ B8       │
+  │ factors?)           │ points, bugs,  │  FOR/AGAINST         │          │
+  │                     │ blockers       │                      │          │
+  ├─────────────────────┼────────────────┼──────────────────────┼──────────┤
+  │                     │ Replay         │ Checklist items,     │          │
+  │ RQ5                 │ package, repo  │ non-determinism      │ A4, B9   │
+  │ (Reproducibility?)  │ state, missing │ sources              │          │
+  │                     │  artifacts     │                      │          │
+  └─────────────────────┴────────────────┴──────────────────────┴──────────┘
+
+  B1) RQs + Operational Definitions
+
+  RQ1 (Backlog reconstruction): Addressed fully in PASS 1. 8 BL items, 10 UI
+  instructions.
+
+  RQ2 (Strategies): Observed via transcript sequences. Each BL maps to an
+  ordered strategy sequence. Codes defined in B2 below.
+
+  RQ3 (Outcomes/Quality): Scored via rubric (B5). Objective signals: all 5
+  programs compile cleanly [L:run_1-5], all produce expected outputs
+  [L:run_6-15]. Two bugs were found and fixed during development.
+
+  RQ4 (Contributing factors): Light process tracing (B8). Key factors: COBOL
+  expertise, tic-tac-toe isomorphism insight, two-pass architecture decision.
+
+  RQ5 (Reproducibility): Checklist-based assessment. Key gaps: no test suite, no
+   build system, single squashed commit.
+
+  B2) STRATEGY CODEBOOK
+
+  Code: PLAN
+  Definition: Explicit reasoning/design before coding
+  Inclusion: Agent discusses architecture, data structures, algorithms
+  Exclusion: Inline code comments
+  Example (+): Agent explains two-pass minimax architecture [T:msg_016]
+  Example (-): Writing comments in code
+  ────────────────────────────────────────
+  Code: SCAF
+  Definition: Creating structural scaffolding (files, data divisions,
+    boilerplate)
+  Inclusion: New file creation, COBOL division setup
+  Exclusion: Adding logic to existing structure
+  Example (+): Writing game15.cob from scratch [T:msg_006]
+  Example (-): Editing a paragraph
+  ────────────────────────────────────────
+  Code: INCR
+  Definition: Incremental feature addition to existing code
+  Inclusion: Adding --unique, adding BAD-TABLE
+  Exclusion: Full file rewrites
+  Example (+): Adding avoid feature [T:msg_025]
+  Example (-): Creating game015.cob (that's SCAF)
+  ────────────────────────────────────────
+  Code: RETR
+  Definition: Retrieving/reading existing code before modification
+  Inclusion: Read tool calls before edits
+  Exclusion: Initial file creation
+  Example (+): Reading game15tree.cob before adding avoid [T:msg_025]
+  Example (-): -
+  ────────────────────────────────────────
+  Code: DBG
+  Definition: Diagnosing and fixing bugs after observing unexpected output
+  Inclusion: Identifying root cause, applying fix
+  Exclusion: Preventive validation
+  Example (+): PIC 99 display bug fix [T:msg_021]
+  Example (-): -
+  ────────────────────────────────────────
+  Code: TEST
+  Definition: Running programs and inspecting output for correctness
+  Inclusion: Executing binaries, comparing output
+  Exclusion: Compilation-only checks
+  Example (+): ./game15 and checking counts [T:msg_008]
+  Example (-): -
+  ────────────────────────────────────────
+  Code: REFA
+  Definition: Restructuring code without changing behavior
+  Inclusion: Refactoring for clarity or performance
+  Exclusion: Feature additions
+  Example (+): None observed
+  Example (-): -
+  ────────────────────────────────────────
+  Code: TOOL
+  Definition: Using toolchain commands (compile, git, gh)
+  Inclusion: cobc, git init, gh repo create
+  Exclusion: Running the program itself
+  Example (+): cobc -x -o game15 game15.cob [T:msg_007]
+  Example (-): -
+  ────────────────────────────────────────
+  Code: PROMPT
+  Definition: Agent sub-task delegation or prompt engineering
+  Inclusion: Agent tool usage for planning
+  Exclusion: Direct coding
+  Example (+): Agent for tree architecture planning [T:msg_016]
+  Example (-): -
+  ────────────────────────────────────────
+  Code: RISK
+  Definition: Identifying potential problems before they occur
+  Inclusion: Noting full tree too large, token limits
+  Exclusion: Post-hoc bug analysis
+  Example (+): Noting 255K games too large for full tree [T:msg_016]
+  Example (-): -
+  ────────────────────────────────────────
+  Code: VERIFY
+  Definition: Systematic verification beyond basic testing
+  Inclusion: Multi-angle output checks (wc, grep, head/tail)
+  Exclusion: Single test run
+  Example (+): Counting nodes, wins, draws separately [T:msg_022]
+  Example (-): -
+
+  B3) EPISODE SEGMENTATION
+
+  Macro phases: Bootstrap (BL-001) → Feature Growth (BL-002–006) → Stabilization
+   (none needed) → Hardening (none — no tests/CI)
+
+  EP-BL001-01: Initial game counter
+
+  - Trigger: UI-001 feature request
+  - Action: PLAN → SCAF → TOOL (compile) → TEST (run)
+  - Feedback: Correct output (255,168)
+  - Next: User satisfied, requests enhancement
+
+  EP-BL002-01: Symmetry deduplication
+
+  - Trigger: UI-002 "add a flag"
+  - Action: RETR → PLAN → SCAF (rewrite) → TOOL → TEST → TEST (both modes)
+  - Feedback: Both modes correct
+  - Next: User satisfied, moves to tree
+
+  EP-BL003-01: Optimal play tree (design + implement)
+
+  - Trigger: UI-003 tree request
+  - Action: PLAN → RISK (full tree too large) → PROMPT (agent sub-task) → SCAF →
+   TOOL → TEST
+  - Feedback: Bug — numbers show "0"
+
+  EP-BL003-02: Display bug fix
+
+  - Trigger: Bug observed in EP-BL003-01 output
+  - Action: DBG (diagnose PIC 99 issue) → INCR (add DISP-DIGIT) → TOOL → TEST
+  - Feedback: Fix works → VERIFY (multi-angle: wc -l, grep wins, grep draws)
+  - Next: User requests avoid feature
+
+  EP-BL004-01: Avoid annotations
+
+  - Trigger: UI-004 suggestion
+  - Action: RETR → PLAN → INCR (BAD-TABLE + COLLECT-OPTIMAL + PRINT-AVOID) →
+  TOOL → TEST
+  - Feedback: Bug — [] empty brackets, wrong owners
+
+  EP-BL004-02: COLLECT-OPTIMAL corruption fix
+
+  - Trigger: Bug observed in EP-BL004-01 output
+  - Action: DBG (diagnose CUR-NUM corruption in loop) → INCR (use CHOSEN(DEPTH))
+   → TOOL → TEST → VERIFY
+  - Feedback: Clean output, user says "nice!"
+
+  EP-BL005-01: Game of 0.15 adaptation
+
+  - Trigger: UI-005 adaptation request
+  - Action: PLAN (note mathematical equivalence) → SCAF (two new files) → TOOL →
+   TEST → VERIFY
+  - Feedback: Correct, identical results with "0.0X" display
+
+  EP-BL006-01: Variant generator (first attempt)
+
+  - Trigger: UI-006 generator request
+  - Action: PLAN → SCAF (attempt write)
+  - Feedback: Context overflow → auto-continuation
+
+  EP-BL006-02: Variant generator (token limit)
+
+  - Trigger: UI-007 "continue"
+  - Action: SCAF (attempt write)
+  - Feedback: Output token limit exceeded (twice)
+
+  EP-BL006-03: Variant generator (success)
+
+  - Trigger: UI-008 "continue"
+  - Action: RETR (read existing files for reference) → SCAF → TOOL → TEST (5
+  different inputs)
+  - Feedback: All tests pass
+
+  EP-BL007-01: Git setup
+
+  - Trigger: UI-009
+  - Action: TOOL (git init, add, commit)
+
+  EP-BL008-01: GitHub push
+
+  - Trigger: UI-010
+  - Action: TOOL (gh repo create --push)
+
+  B4) PER-BL STRATEGY ANNOTATION
+
+  BL: BL-001
+  Strategy Sequence: PLAN→SCAF→TOOL→TEST
+  DBG Loops: 0
+  Build/Test Count: 1 compile, 1 run
+  Blocking Points: None
+  Recovery: -
+  ────────────────────────────────────────
+  BL: BL-002
+  Strategy Sequence: RETR→PLAN→SCAF→TOOL→TEST→TEST
+  DBG Loops: 0
+  Build/Test Count: 1 compile, 2 runs
+  Blocking Points: None
+  Recovery: -
+  ────────────────────────────────────────
+  BL: BL-003
+  Strategy Sequence: PLAN→RISK→PROMPT→SCAF→TOOL→TEST→DBG→INCR→TOOL→TEST→VERIFY
+  DBG Loops: 1
+  Build/Test Count: 3 compiles, 5+ runs
+  Blocking Points: PIC 99 display bug
+  Recovery: DISP-DIGIT intermediary
+  ────────────────────────────────────────
+  BL: BL-004
+  Strategy Sequence: RETR→PLAN→INCR→TOOL→TEST→DBG→INCR→TOOL→TEST→VERIFY
+  DBG Loops: 1
+  Build/Test Count: 2 compiles, 4+ runs
+  Blocking Points: CUR-NUM corruption
+  Recovery: Use CHOSEN(DEPTH)
+  ────────────────────────────────────────
+  BL: BL-005
+  Strategy Sequence: PLAN→SCAF→SCAF→TOOL→TEST→TEST→VERIFY
+  DBG Loops: 0
+  Build/Test Count: 2 compiles (combined), 3+ runs
+  Blocking Points: None
+  Recovery: -
+  ────────────────────────────────────────
+  BL: BL-006
+  Strategy Sequence: PLAN→SCAF(fail)→SCAF(fail)→RETR→SCAF→TOOL→TEST×5
+  DBG Loops: 0
+  Build/Test Count: 1 compile, 5 runs
+  Blocking Points: Context overflow + 2× token limit
+  Recovery: Retry with reference reads
+  ────────────────────────────────────────
+  BL: BL-007
+  Strategy Sequence: TOOL×4
+  DBG Loops: 0
+  Build/Test Count: N/A
+  Blocking Points: None
+  Recovery: -
+  ────────────────────────────────────────
+  BL: BL-008
+  Strategy Sequence: TOOL
+  DBG Loops: 0
+  Build/Test Count: N/A
+  Blocking Points: None
+  Recovery: -
+
+  Cross-session summary:
+  - Most frequent codes: SCAF (8), TEST (8+), TOOL (8+), PLAN (7)
+  - Common sequence pattern: PLAN → SCAF → TOOL → TEST
+  - DBG cycles: 2 total (both in tree program BL-003/BL-004), each resolved in 1
+   cycle
+  - VERIFY usage: 4 BLs (BL-003, BL-004, BL-005, BL-006) — multi-angle
+  verification after complex features
+  - TEST coverage: Every BL with code was tested via execution
+
+  B5) OUTCOME & QUALITY RUBRIC
+
+  Scale: 0 = deficient, 1 = adequate, 2 = strong. NA = insufficient evidence.
+
+  BL: BL-001
+  Q1 Correctness: 2 (matches known result 255,168)
+  Q2 Build/Run: 2 (clean compile + run)
+  Q3 Test Rigor: 1 (manual output check only)
+  Q4 Robustness: 1 (no edge-case testing)
+  Q5 Maintainability: 2 (well-commented, clear structure)
+  Q6 Reproducibility: 2 (single file, deterministic)
+  Confidence: High
+  ────────────────────────────────────────
+  BL: BL-002
+  Q1 Correctness: 2 (31,896 = 255,168/8 within expected range)
+  Q2 Build/Run: 2
+  Q3 Test Rigor: 1
+  Q4 Robustness: 1
+  Q5 Maintainability: 2 (clean SYM-TABLE encoding)
+  Q6 Reproducibility: 2
+  Confidence: High
+  ────────────────────────────────────────
+  BL: BL-003
+  Q1 Correctness: 2 (0 wins under optimal play confirms game-theoretic result)
+  Q2 Build/Run: 2
+  Q3 Test Rigor: 2 (multi-angle: wc, grep wins, grep draws)
+  Q4 Robustness: 1
+  Q5 Maintainability: 1 (complex two-pass, 558 lines)
+  Q6 Reproducibility: 2
+  Confidence: High
+  ────────────────────────────────────────
+  BL: BL-004
+  Q1 Correctness: 2 (avoid annotations verified, no [] bugs)
+  Q2 Build/Run: 2
+  Q3 Test Rigor: 2 (multi-angle verification)
+  Q4 Robustness: 1
+  Q5 Maintainability: 1 (adds complexity to already complex file)
+  Q6 Reproducibility: 2
+  Confidence: High
+  ────────────────────────────────────────
+  BL: BL-005
+  Q1 Correctness: 2 (identical results to BL-001/003)
+  Q2 Build/Run: 2
+  Q3 Test Rigor: 1 (spot-checked output format)
+  Q4 Robustness: 1
+  Q5 Maintainability: 1 (code duplication — 2 files clone BL-001/003)
+  Q6 Reproducibility: 2
+  Confidence: High
+  ────────────────────────────────────────
+  BL: BL-006
+  Q1 Correctness: 2 (multiple inputs verified, 15,9 matches BL-001)
+  Q2 Build/Run: 2
+  Q3 Test Rigor: 2 (5 distinct inputs tested)
+  Q4 Robustness: 2 (input validation, usage msg, auto-derive)
+  Q5 Maintainability: 2 (well-structured, dynamic)
+  Q6 Reproducibility: 2
+  Confidence: High
+
+  Aggregate: Mean Q1=2.0, Q2=2.0, Q3=1.5, Q4=1.2, Q5=1.5, Q6=2.0
+
+  B6) COBOL CAPABILITY & QUALITY PANEL
+
+  Compilation status: All 5 programs compile with 0 errors, 0 warnings on
+  GnuCOBOL 3.2.0 [L:run_1-5].
+
+  Runtime behavior: All programs execute correctly and terminate. game15 runs in
+   ~0.45s [T:f44c590a:msg_008]. No runtime errors observed.
+
+  Idiomatic indicators:
+
+  Indicator: Division structure
+  Assessment: Correct — IDENTIFICATION, DATA, PROCEDURE divisions all present
+  Evidence: All .cob files
+  ────────────────────────────────────────
+  Indicator: Data definitions
+  Assessment: Appropriate PIC clauses; OCCURS for arrays; REDEFINES for overlay
+    access
+  Evidence: [R:game15.cob:22-97], [R:gameN.cob:34-38]
+  ────────────────────────────────────────
+  Indicator: Level numbers
+  Assessment: Proper 01/05/10/15 hierarchy
+  Evidence: Consistent across all files
+  ────────────────────────────────────────
+  Indicator: PERFORM loops
+  Assessment: Idiomatic PERFORM VARYING with UNTIL; iterative DFS
+  (non-recursive,
+    appropriate for COBOL)
+  Evidence: [R:game15.cob:219-226]
+  ────────────────────────────────────────
+  Indicator: I/O handling
+  Assessment: ACCEPT FROM COMMAND-LINE for args; DISPLAY for output; UNSTRING
+  for
+    parsing
+  Evidence: [R:gameN.cob:116-133]
+  ────────────────────────────────────────
+  Indicator: Error handling
+  Assessment: Input validation in gameN (range checks, usage message)
+  Evidence: [R:gameN.cob:156-170]
+  ────────────────────────────────────────
+  Indicator: COBOL idioms
+  Assessment: VALUE clauses for initialization; FUNCTION TRIM; FUNCTION NUMVAL
+    for conversion; EVALUATE for switch
+  Evidence: [R:game15tree.cob:483-496]
+  ────────────────────────────────────────
+  Indicator: Comments
+  Assessment: Extensive *-column comments explaining algorithm, data structures,
+
+    usage
+  Evidence: All files
+  ────────────────────────────────────────
+  Indicator: Working storage
+  Assessment: Well-organized with logical groupings (tables, counters, working
+    vars)
+  Evidence: All files
+
+  Toolchain: GnuCOBOL 3.2.0, invoked as cobc -x (compile to executable). No
+  intermediate .o files, no linking flags needed.
+
+  Capability delta over time:
+
+  ┌────────┬─────────────────────────────────────────────────────────────────┐
+  │ Phase  │                     Capability Demonstrated                     │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ BL-001 │ Basic COBOL: DFS engine, arrays, PIC clauses, PERFORM loops     │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ BL-002 │ Advanced: REDEFINES for magic-square symmetry table, canonical  │
+  │        │ form checking                                                   │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ BL-003 │ Complex: Two-pass architecture, memoization table (19,683       │
+  │        │ entries), ASCII tree assembly via string manipulation           │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ BL-004 │ Debugging: Identified subtle variable-scope corruption in COBOL │
+  │        │  (no local variables)                                           │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ BL-005 │ Adaptation: Display-layer changes without logic modification    │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ BL-006 │ Generalization: Dynamic triple generation, parameterized data   │
+  │        │ structures (OCCURS 15/84), input validation                     │
+  └────────┴─────────────────────────────────────────────────────────────────┘
+
+  Progression: Steady increase in COBOL complexity. The agent demonstrated
+  fluency with COBOL's flat variable scope (cause of Bug 2), iterative
+  algorithms (no recursion available), and string assembly for formatted output.
+
+  B7) INTERACTION DEMAND ANALYSIS
+
+  UI distribution by category:
+  - FeatureRequest: 6 (60%)
+  - Meta ("continue"): 2 (20%)
+  - Tooling/Build: 2 (20%)
+
+  UI strength distribution:
+  - Explicit imperative: 9 (90%)
+  - Suggestion: 1 (10%)
+
+  UI density per BL:
+
+  ┌────────┬─────────────────────┬──────────────────────────────────────────┐
+  │   BL   │      UI count       │                 Density                  │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-001 │ 1                   │ Low                                      │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-002 │ 1                   │ Low                                      │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-003 │ 1                   │ Low                                      │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-004 │ 1                   │ Low                                      │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-005 │ 1                   │ Low                                      │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-006 │ 3 (incl. 2          │ Medium (due to platform limits, not      │
+  │        │ "continue")         │ complexity)                              │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-007 │ 1                   │ Low                                      │
+  ├────────┼─────────────────────┼──────────────────────────────────────────┤
+  │ BL-008 │ 1                   │ Low                                      │
+  └────────┴─────────────────────┴──────────────────────────────────────────┘
+
+  Clarification cycles: Zero. The user never asked a clarifying question and the
+   agent never asked for clarification. All instructions were self-contained and
+   unambiguous.
+
+  Instruction churn: Zero. No scope changes, no reversals, no contradictions.
+  Each instruction built monotonically on the previous.
+
+  Correlation observations:
+  - Extremely low interaction demand across the session (10 user messages for 8
+  BL items = ~1.25 messages/BL)
+  - The user's instructions were remarkably precise (full game rules quoted
+  verbatim in UI-001, UI-005)
+  - The only "extra" interactions (UI-007, UI-008) were platform-imposed, not
+  user-caused
+  - INFERRED: The user has domain expertise (combinatorial game theory, D4
+  dihedral groups) based on the precision of requests
+
+  B8) FACTORS & CLAIMS (Light Process Tracing)
+
+  Claim 1: The tic-tac-toe isomorphism insight was critical for BL-002
+
+  - Claim: The agent's recognition that Game of 15 ≅ Tic-tac-toe (via the 3x3
+  magic square) enabled the D4 symmetry deduplication approach.
+  - Evidence FOR: The agent explicitly stated "The 8 winning triples...
+  correspond exactly to rows/columns/diagonals" [T:msg_006]. The SYM-TABLE
+  directly encodes magic square symmetries [R:game15.cob:80-96].
+  - Evidence AGAINST: The user's instruction "without duplicates" did not
+  specify which symmetries — the agent chose D4 autonomously.
+  - Judgment: Likely. The isomorphism is mathematically well-known and the agent
+   applied it correctly.
+
+  Claim 2: The two-pass architecture was the key design decision for BL-003
+
+  - Claim: Choosing to separate minimax computation (Pass 1) from tree printing
+  (Pass 2) enabled correct optimal-play pruning.
+  - Evidence FOR: The agent used a planning sub-agent [T:msg_016-017] that
+  explicitly designed the two-pass approach. The memoization table is populated
+  in Pass 1 and queried in Pass 2 [R:game15tree.cob:114-128, 299-386].
+  - Evidence AGAINST: A single-pass approach could also work but would be harder
+   to debug in COBOL's flat scope.
+  - Judgment: Likely. This was a sound architectural decision, especially given
+  COBOL's constraints.
+
+  Claim 3: COBOL's flat variable scope caused both bugs
+
+  - Claim: Both bugs (PIC 99 display, CUR-NUM corruption) stem from COBOL's lack
+   of local variables.
+  - Evidence FOR: Bug 1: CUR-NUM PIC 99 was used globally; moving to a PIC X(1)
+  field took only the first character of "01" → "0". Bug 2: COLLECT-OPTIMAL loop
+   overwrote CUR-NUM which was also used in the calling context [T:msg_025].
+  - Evidence AGAINST: Bug 1 is more of a PIC format mismatch than a scope issue.
+  - Judgment: Plausible. Bug 2 is clearly a scope/aliasing issue. Bug 1 is
+  partially related (global CUR-NUM used in display context with wrong PIC).
+
+  Claim 4: Platform limitations (context overflow + token limit) delayed BL-006 
+  but did not affect quality
+
+  - Claim: The three attempts needed for gameN.cob were caused by platform
+  constraints, not code quality issues.
+  - Evidence FOR: The final program compiled on first attempt and passed all 5
+  test inputs. The context overflow was automatic (session too long). The token
+  limits were due to the large program size (~340 lines).
+  - Evidence AGAINST: None.
+  - Judgment: Likely.
+
+  B9) SYNTHESIS + RECOMMENDATIONS + THREATS TO VALIDITY
+
+  Strategy Patterns & Outcomes
+
+  The dominant strategy pattern was PLAN → SCAF → TOOL → TEST, observed in 6/8
+  BLs. This "design-first, test-after" approach produced high correctness scores
+   (Q1=2.0 across all BLs) with only 2 debugging cycles total.
+
+  Key strategic observations:
+  1. Zero-iteration planning: The agent's initial designs were almost always
+  correct. Only 2/6 features required debugging cycles.
+  2. Multi-angle verification (VERIFY): When used (BL-003, BL-004, BL-005,
+  BL-006), it caught residual issues and increased confidence.
+  3. Progressive complexity: Each BL built on the patterns established in
+  earlier ones (DFS engine → memoization → parameterization), which may explain
+  the low bug rate.
+  4. Agent delegation (PROMPT): Used once (BL-003) for the most architecturally
+  complex feature, resulting in a sound two-pass design.
+
+  Recommendations
+
+  1. Add a Makefile: All compilation commands are ad-hoc. A simple Makefile with
+   all, clean, and per-target rules would improve reproducibility.
+  2. Add automated tests: A shell script comparing program outputs against
+  expected values would catch regressions. E.g., ./game15 | diff - 
+  expected_game15.txt.
+  3. Finer git history: Committing per-feature (or at least per-BL) would
+  improve traceability and rollback capability.
+  4. Reduce code duplication: game015.cob and game015tree.cob are near-clones of
+   game15.cob and game15tree.cob respectively. A build-time preprocessing
+  approach or parameterization (like gameN) could reduce this.
+  5. Cross-validate gameN against game15: ./gameN 15 9 and ./game15 should
+  produce identical counts — they do [L:run_6,12], but this should be an
+  automated check.
+
+  Threats to Validity
+
+  Threat: Single squashed commit — all development appears as one atomic change,
+
+    no per-feature evolution visible in git
+  Severity: Medium
+  Mitigation: Transcript provides temporal ordering
+  ────────────────────────────────────────
+  Threat: No formal test suite — all quality assessment is based on manual
+  output
+     comparison
+  Severity: Medium
+  Mitigation: Independent verification runs [L:run_1-15] partially compensate
+  ────────────────────────────────────────
+  Threat: Context overflow — part of the agent's reasoning during BL-006 is lost
+  Severity: Low
+  Mitigation: Final code quality unaffected; 3 attempts documented
+  ────────────────────────────────────────
+  Threat: Output token limit — two truncated generation attempts
+  Severity: Low
+  Mitigation: Final attempt succeeded completely
+  ────────────────────────────────────────
+  Threat: No known oracle for symmetry counts — 31,896 unique games is accepted
+    but not independently verified against a third-party source
+  Severity: Low
+  Mitigation: Value is internally consistent (255,168/8 = 31,896, which is exact
+
+    — this is a confirmation)
+  ────────────────────────────────────────
+  Threat: Manual transcript reconstruction — session log was parsed
+    programmatically but timestamps and message boundaries may have minor
+    alignment issues
+  Severity: Low
+  Mitigation: Key facts cross-validated with repo state
+  ────────────────────────────────────────
+  Threat: User expertise assumed — interaction demand analysis assumes low
+  demand
+     reflects clear instructions, but could also reflect user tolerance for
+    imperfect results
+  Severity: Low
+  Mitigation: All outputs were mathematically verified
+
+  ---
+  APPENDIX (Machine-Readable)
+
+  session_metadata:
+    repo_path: /Users/mathieuacher/SANDBOX/cobol-tictactoe
+    selected_sessions:
+      - f44c590a-7e53-4bbd-8c28-04f5b86c98fa
+    commit_hash: dc71e86cc09f230a0f088b411efefd8f98e93890
+    session_start: "2026-03-12T19:46:29.880Z"
+    session_end: "2026-03-19T09:41:13.640Z"
+    active_periods:
+      - "2026-03-12 19:52 - 21:19 CET"
+      - "2026-03-13 07:16 - 10:16 CET"
+      - "2026-03-19 09:39 - 09:41 CET"
+    gnucobol_version: "3.2.0"
+    platform: "darwin (macOS)"
+
+  user_instruction_index:
+    - id: UI-001
+      evidence: "T:f44c590a:msg_003"
+      quote: "Write a COBOL program that computes the number of possible games 
+  in the Game of 15"
+      category: FeatureRequest
+      strength: ExplicitImperative
+      target: "Code + RuntimeBehavior"
+      mapped_bl: [BL-001]
+    - id: UI-002
+      evidence: "T:f44c590a:msg_010"
+      quote: "add a flag to compute numbers without duplicates"
+      category: FeatureRequest
+      strength: ExplicitImperative
+      target: "Code + RuntimeBehavior"
+      mapped_bl: [BL-002]
+    - id: UI-003
+      evidence: "T:f44c590a:msg_015"
+      quote: "depict a tree (ASCII format) of all possible moves under optimal 
+  play"
+      category: FeatureRequest
+      strength: ExplicitImperative
+      target: "Code + RuntimeBehavior"
+      mapped_bl: [BL-003]
+    - id: UI-004
+      evidence: "T:f44c590a:msg_024"
+      quote: "follow-up choice to NOT perform (you lose) vs. choice you can 
+  make"
+      category: FeatureRequest
+      strength: Suggestion
+      target: "Code + RuntimeBehavior"
+      mapped_bl: [BL-004]
+    - id: UI-005
+      evidence: "T:f44c590a:msg_027"
+      quote: "Game of 0.15 [...] adapt your program to count and tree"
+      category: FeatureRequest
+      strength: ExplicitImperative
+      target: "Code + RuntimeBehavior"
+      mapped_bl: [BL-005]
+    - id: UI-006
+      evidence: "T:f44c590a:msg_029"
+      quote: "generator that invents a variant of the game of N=15"
+      category: FeatureRequest
+      strength: ExplicitImperative
+      target: "Code + RuntimeBehavior"
+      mapped_bl: [BL-006]
+    - id: UI-007
+      evidence: "T:f44c590a:msg_033"
+      quote: "continue"
+      category: Meta
+      strength: ExplicitImperative
+      target: Code
+      mapped_bl: [BL-006]
+    - id: UI-008
+      evidence: "T:f44c590a:msg_035"
+      quote: "continue"
+      category: Meta
+      strength: ExplicitImperative
+      target: Code
+      mapped_bl: [BL-006]
+    - id: UI-009
+      evidence: "T:f44c590a:msg_038"
+      quote: "create a git and commit"
+      category: "Tooling/Build"
+      strength: ExplicitImperative
+      target: RepoStructure
+      mapped_bl: [BL-007]
+    - id: UI-010
+      evidence: "T:f44c590a:msg_040"
+      quote: "push on Github and repo agentic-cobol-game15tictactoe"
+      category: "Tooling/Build"
+      strength: ExplicitImperative
+      target: RepoStructure
+      mapped_bl: [BL-008]
+
+  backlog_items:
+    - id: BL-001
+      title: "Game of 15 Counter"
+      type: Feature
+      source_uis: [UI-001]
+      dod: "Yes"
+      artifacts: [game15.cob]
+      bugs: 0
+    - id: BL-002
+      title: "Symmetry Deduplication (--unique)"
+      type: Feature
+      source_uis: [UI-002]
+      dod: "Yes"
+      artifacts: [game15.cob]
+      bugs: 0
+    - id: BL-003
+      title: "Optimal Play Tree (Minimax + ASCII)"
+      type: Feature
+      source_uis: [UI-003]
+      dod: "Yes"
+      artifacts: [game15tree.cob]
+      bugs: 1
+    - id: BL-004
+      title: "Avoid Annotations"
+      type: Feature
+      source_uis: [UI-004]
+      dod: "Yes"
+      artifacts: [game15tree.cob]
+      bugs: 1
+    - id: BL-005
+      title: "Game of 0.15 Variant"
+      type: Feature
+      source_uis: [UI-005]
+      dod: "Yes"
+      artifacts: [game015.cob, game015tree.cob]
+      bugs: 0
+    - id: BL-006
+      title: "Parameterized Variant Generator"
+      type: Feature
+      source_uis: [UI-006, UI-007, UI-008]
+      dod: "Yes"
+      artifacts: [gameN.cob]
+      bugs: 0
+      blockers: ["context_overflow", "token_limit_x2"]
+    - id: BL-007
+      title: "Git Repository Setup"
+      type: Chore
+      source_uis: [UI-009]
+      dod: "Yes"
+      artifacts: [.gitignore]
+    - id: BL-008
+      title: "GitHub Push"
+      type: Chore
+      source_uis: [UI-010]
+      dod: "Yes"
+
+  replay_plan:
+    - bl: BL-001
+      preconditions: "GnuCOBOL 3.2.0"
+      prompt: "Write a COBOL program that computes all possible games in the 
+  Game of 15 (numbers 1-9, sum to 15 wins). Report P1 wins, P2 wins, draws, 
+  total."
+      expected: {p1_wins: 131184, p2_wins: 77904, draws: 46080, total: 255168}
+      validate: "cobc -x -o game15 game15.cob && ./game15"
+    - bl: BL-002
+      preconditions: "BL-001 complete"
+      prompt: "Add --unique flag for symmetry deduplication using D4 dihedral 
+  group of the magic square."
+      expected: {unique_total: 31896}
+      validate: "./game15 --unique"
+    - bl: BL-003
+      preconditions: "BL-001"
+      prompt: "Write a COBOL program displaying an ASCII tree of optimal play 
+  (minimax) for Game of 15."
+      expected: {draws: 3584, wins: 0}
+      validate: "./game15tree --depth 2"
+    - bl: BL-004
+      preconditions: "BL-003"
+      prompt: "Add avoid annotations showing losing moves at each decision 
+  point."
+      expected: {total_lines: 15303}
+      validate: "./game15tree | grep 'avoid:' | head"
+    - bl: BL-005
+      preconditions: "BL-001+BL-003+BL-004"
+      prompt: "Adapt for Game of 0.15 (numbers 0.01-0.09, display as 0.0X)."
+      expected: {total: 255168}
+      validate: "cobc -x -o game015 game015.cob && ./game015"
+    - bl: BL-006
+      preconditions: "BL-001 pattern"
+      prompt: "Create parameterized gameN accepting target sum and optional max 
+  number. Display rules, winning triples, game counts."
+      expected: {"15,9": 255168, "12,8": 34704, "10,7": 4752}
+      validate: "./gameN 15 9"
+
+  rq_coverage_matrix:
+    RQ1: {sources: ["repo", "transcript", "git"], indicators: ["artifact_count",
+   "BL_items"], sections: ["A0-A4"]}
+    RQ2: {sources: ["transcript"], indicators: ["strategy_codes", "sequences",
+  "loop_counts"], sections: ["B2-B4"]}
+    RQ3: {sources: ["compilation_logs", "run_outputs", "repo"], indicators:
+  ["rubric_scores", "build_success"], sections: ["B5", "B6"]}
+    RQ4: {sources: ["transcript_turning_points"], indicators:
+  ["claims_evidence"], sections: ["B8"]}
+    RQ5: {sources: ["replay_package", "repo_state"], indicators: ["checklist",
+  "missing_artifacts"], sections: ["A4", "B9"]}
+
+  strategy_codebook:
+    - {code: PLAN, definition: "Explicit reasoning/design before coding"}
+    - {code: SCAF, definition: "Creating new files or structural scaffolding"}
+    - {code: INCR, definition: "Incremental feature addition to existing code"}
+    - {code: RETR, definition: "Reading existing code before modification"}
+    - {code: DBG, definition: "Diagnosing and fixing bugs after unexpected 
+  output"}
+    - {code: TEST, definition: "Running programs and inspecting output"}
+    - {code: REFA, definition: "Restructuring without behavior change"}
+    - {code: TOOL, definition: "Toolchain commands (compile, git, gh)"}
+    - {code: PROMPT, definition: "Agent sub-task delegation"}
+    - {code: RISK, definition: "Identifying potential problems proactively"}
+    - {code: VERIFY, definition: "Multi-angle systematic verification"}
+
+  episodes:
+    - {id: "EP-BL001-01", bl: BL-001, phase: bootstrap, sequence: [PLAN, SCAF,
+  TOOL, TEST], dbg_loops: 0}
+    - {id: "EP-BL002-01", bl: BL-002, phase: feature-growth, sequence: [RETR,
+  PLAN, SCAF, TOOL, TEST, TEST], dbg_loops: 0}
+    - {id: "EP-BL003-01", bl: BL-003, phase: feature-growth, sequence: [PLAN,
+  RISK, PROMPT, SCAF, TOOL, TEST], dbg_loops: 0}
+    - {id: "EP-BL003-02", bl: BL-003, phase: feature-growth, sequence: [DBG,
+  INCR, TOOL, TEST, VERIFY], dbg_loops: 1}
+    - {id: "EP-BL004-01", bl: BL-004, phase: feature-growth, sequence: [RETR,
+  PLAN, INCR, TOOL, TEST], dbg_loops: 0}
+    - {id: "EP-BL004-02", bl: BL-004, phase: feature-growth, sequence: [DBG,
+  INCR, TOOL, TEST, VERIFY], dbg_loops: 1}
+    - {id: "EP-BL005-01", bl: BL-005, phase: feature-growth, sequence: [PLAN,
+  SCAF, SCAF, TOOL, TEST, TEST, VERIFY], dbg_loops: 0}
+    - {id: "EP-BL006-01", bl: BL-006, phase: feature-growth, sequence: [PLAN,
+  SCAF], dbg_loops: 0, notes: "context overflow"}
+    - {id: "EP-BL006-02", bl: BL-006, phase: feature-growth, sequence: [SCAF],
+  dbg_loops: 0, notes: "token limit x2"}
+    - {id: "EP-BL006-03", bl: BL-006, phase: feature-growth, sequence: [RETR,
+  SCAF, TOOL, TEST, TEST, TEST, TEST, TEST], dbg_loops: 0}
+    - {id: "EP-BL007-01", bl: BL-007, phase: stabilization, sequence: [TOOL,
+  TOOL, TOOL, TOOL], dbg_loops: 0}
+    - {id: "EP-BL008-01", bl: BL-008, phase: stabilization, sequence: [TOOL],
+  dbg_loops: 0}
+
+  per_bl_strategy_annotations:
+    BL-001: {sequence: [PLAN, SCAF, TOOL, TEST], dbg_loops: 0, compile_count: 1,
+   run_count: 1}
+    BL-002: {sequence: [RETR, PLAN, SCAF, TOOL, TEST, TEST], dbg_loops: 0,
+  compile_count: 1, run_count: 2}
+    BL-003: {sequence: [PLAN, RISK, PROMPT, SCAF, TOOL, TEST, DBG, INCR, TOOL,
+  TEST, VERIFY], dbg_loops: 1, compile_count: 3, run_count: 5}
+    BL-004: {sequence: [RETR, PLAN, INCR, TOOL, TEST, DBG, INCR, TOOL, TEST,
+  VERIFY], dbg_loops: 1, compile_count: 2, run_count: 4}
+    BL-005: {sequence: [PLAN, SCAF, SCAF, TOOL, TEST, TEST, VERIFY], dbg_loops:
+  0, compile_count: 2, run_count: 3}
+    BL-006: {sequence: [PLAN, SCAF, SCAF, RETR, SCAF, TOOL, TEST, TEST, TEST,
+  TEST, TEST], dbg_loops: 0, compile_count: 1, run_count: 5, platform_blockers:
+  3}
+    BL-007: {sequence: [TOOL, TOOL, TOOL, TOOL], dbg_loops: 0}
+    BL-008: {sequence: [TOOL], dbg_loops: 0}
+
+  per_bl_rubric_scores:
+    BL-001: {Q1: 2, Q2: 2, Q3: 1, Q4: 1, Q5: 2, Q6: 2, confidence: High}
+    BL-002: {Q1: 2, Q2: 2, Q3: 1, Q4: 1, Q5: 2, Q6: 2, confidence: High}
+    BL-003: {Q1: 2, Q2: 2, Q3: 2, Q4: 1, Q5: 1, Q6: 2, confidence: High}
+    BL-004: {Q1: 2, Q2: 2, Q3: 2, Q4: 1, Q5: 1, Q6: 2, confidence: High}
+    BL-005: {Q1: 2, Q2: 2, Q3: 1, Q4: 1, Q5: 1, Q6: 2, confidence: High}
+    BL-006: {Q1: 2, Q2: 2, Q3: 2, Q4: 2, Q5: 2, Q6: 2, confidence: High}
+
+  interaction_metrics:
+    total_user_messages: 10
+    total_bl_items: 8
+    messages_per_bl: 1.25
+    feature_requests: 6
+    meta_messages: 2
+    tooling_messages: 2
+    clarification_cycles: 0
+    scope_changes: 0
+    instruction_strength_explicit: 9
+    instruction_strength_suggestion: 1
+
+  cobol_panel:
+    compilation_errors: 0
+    compilation_warnings: 0
+    runtime_errors: 0
+    bugs_found: 2
+    bugs_fixed: 2
+    programs_count: 5
+    total_lines: 1924
+    gnucobol_version: "3.2.0"
+    idiomatic_score: "Strong"
+    capability_trajectory: "Basic DFS → Symmetry tables → Two-pass minimax with 
+  memoization → Dynamic triple generation"
+
+  claims_process_tracing:
+    - claim: "Tic-tac-toe isomorphism insight enabled D4 symmetry dedup"
+      evidence_for: "Agent stated isomorphism, SYM-TABLE encodes magic square"
+      evidence_against: "User did not specify which symmetries"
+      judgment: Likely
+    - claim: "Two-pass architecture was key for BL-003"
+      evidence_for: "Agent used planning sub-agent, design is sound"
+      evidence_against: "Single-pass possible but harder"
+      judgment: Likely
+    - claim: "COBOL flat variable scope caused both bugs"
+      evidence_for: "Bug 2 clearly scope-related; Bug 1 involved shared CUR-NUM"
+      evidence_against: "Bug 1 is more PIC format mismatch"
+      judgment: Plausible
+    - claim: "Platform limits delayed BL-006 without quality impact"
+      evidence_for: "Final program compiled first try, passed 5 tests"
+      evidence_against: "None"
+      judgment: Likely
+
+  threats_to_validity:
+    - "Single squashed git commit — no per-feature history"
+    - "No automated test suite — quality assessed via manual runs"
+    - "Context overflow lost some agent reasoning for BL-006"
+    - "Two output token truncations for BL-006"
+    - "No independent third-party oracle for symmetry count 31,896"
+    - "Transcript parsed programmatically — minor alignment uncertainties"
+
+  open_questions:
+    cp1: []
+    cp2: []
+    cp3: []
+    defaults_used: "None needed — all evidence was sufficient"
+
+✻ Cooked for 10m 4s
+
+❯ can you generate a README.md with the feature backlog? I plan to commit/push  
+for reproducibility                                                             
+
+⏺ Let me read the current repo state to make sure I include accurate details.
+
+⏺ Bash(./game15 2>&1 && echo "---" && ./game15 --unique 2>&1)
+  ⎿  Game of 15 - Possible Games
+     ===========================
+     Player 1 wins:   131184
+     … +17 lines (ctrl+o to expand)
+
+⏺ Bash(./game15tree --depth 2 2>&1 | head -15)
+  ⎿  Game of 15 - Optimal Play Tree [Draw]
+     |-- P1:1 [Draw]
+     |   avoid: 2, 3, 4, 7
+     … +12 lines (ctrl+o to expand)
+
+⏺ Bash(./gameN 2>&1)
+  ⎿  Usage: ./gameN <target> [<max-number>]
+
+       target      integer sum to win
+     … +6 lines (ctrl+o to expand)
+
+⏺ Write(README.md)
+  ⎿  Wrote 143 lines to README.md
+      1 # Game of 15 in COBOL
+      2 
+      3 Five COBOL programs exploring the **Game of 15** — a combinatoria
+        l number-picking game isomorphic to Tic-Tac-Toe via the 3x3 magic
+         square.
+      4 
+      5 ## The Game of 15
+      6 
+      7 Two players alternate picking a number from {1, 2, ..., 9}. A num
+        ber may not be repeated. The first player to hold three numbers s
+        umming to **15** wins. If all nine numbers are used with no winne
+        r, the game is a draw.
+      8 
+      9 The 8 winning triples (subsets of {1..9} summing to 15) correspon
+        d exactly to the rows, columns, and diagonals of the magic square
+        :
+     … +133 lines (ctrl+o to expand)
+
+⏺ README.md created. It includes:
+  - Game rules and the magic square connection
+  - Per-program documentation with build commands and sample output
+  - The full feature backlog table (BL-001 through BL-008) with dependencies
+  - Bugs encountered and their COBOL-specific root causes
+  - Agentic context (session metadata)
+
+  Ready for you to commit and push whenever you'd like.
+
+✻ Brewed for 52s
+
+❯ | BL-007 | Git repository setup | `.gitignore` | Single commit `dc71e86` |    
+| BL-008 | GitHub push | — | Public repo created | seems unnecessary and out of 
+ the scope. Besides "Avoid annotations (losing-move warnings)" it is unclear    
+whether it is a feature, something asked by users, or something "internal"...   
+Ideally I would like to have, in addition to feature description, the "prompts" 
+ we could use/leverage to reproduce (I'm seeing two prompts: the "raw" prompt   
+if any of the original user; and the "ideal" prompt that is "proper" and        
+describes the feature...) also the original prompt to start the first program   
+("from scratch") is important to keep track and add to the README.md            
+
+⏺ Good feedback. Let me re-read the README and the original user prompts from
+  the analysis to rework it properly.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Write(README.md)
+  ⎿  Added 58 lines, removed 17 lines
+      104  
+      105  ## Feature Backlog (Ex-Post)
+      106  
+      107 -Reconstructed implementation history from the Claude Code sess
+          -ion that produced this repository.                            
+      107 +Reconstructed implementation history from the Claude Code sess
+          +ion that produced this repository. Each feature was requested 
+          +by the user as a prompt; the table below records both the **or
+          +iginal prompt** (verbatim) and a **replay prompt** (self-conta
+          +ined description suitable for reproducing the feature with ano
+          +ther LLM/agent).                                              
+      108  
+      109 -| ID | Feature | Source File(s) | Key Result |                
+      110 -|----|---------|---------------|------------|                 
+      111 -| BL-001 | Game of 15 counter (DFS + backtracking) | `game15.c
+          -ob` | 255,168 total games |                                   
+      112 -| BL-002 | Symmetry deduplication via D4 group (`--unique` fla
+          -g) | `game15.cob` | 31,896 unique games |                     
+      113 -| BL-003 | Optimal play tree (minimax + memoization + ASCII) |
+          - `game15tree.cob` | 12,133 nodes, always draws |              
+      114 -| BL-004 | Avoid annotations (losing-move warnings) | `game15t
+          -ree.cob` | 15,303 lines with avoid lines |                    
+      115 -| BL-005 | Game of 0.15 variant (display-only adaptation) | `g
+          -ame015.cob`, `game015tree.cob` | Identical results, "0.0X" for
+          -mat |                                                         
+      116 -| BL-006 | Parameterized variant generator | `gameN.cob` | Any
+          - target sum N, dynamic triples |                              
+      117 -| BL-007 | Git repository setup | `.gitignore` | Single commit
+          - `dc71e86` |                                                  
+      118 -| BL-008 | GitHub push | — | Public repo created |            
+      109 +### BL-001: Game of 15 Counter                                
+      110  
+      111 +| | |                                                         
+      112 +|---|---|                                                     
+      113 +| **File(s)** | `game15.cob` |                                
+      114 +| **Key result** | 255,168 total games (131,184 P1 wins, 77,90
+          +4 P2 wins, 46,080 draws) |                                    
+      115 +| **Original prompt** | *"The game of 15 is defined as follows
+          +: Two players in turn say a number between one and nine. A par
+          +ticular number may not be repeated. The game is won by the pla
+          +yer who has said three numbers whose sum is 15. If all the num
+          +bers are used and no one gets three numbers that add up to 15 
+          +then the game is a draw. Write a COBOL program (using GNUCobol
+          +) that computes the number of possible games in the game of 15
+          +..."* |                                                       
+      116 +| **Replay prompt** | Write a COBOL program (GnuCOBOL) that en
+          +umerates all possible games in the Game of 15. Two players alt
+          +ernate picking numbers 1-9 (no repeats); a player wins when th
+          +ree of their numbers sum to 15; if all 9 numbers are used with
+          + no winner it is a draw. Use iterative DFS with backtracking. 
+          +Report Player 1 wins, Player 2 wins, draws, and total games. |
+      117 +                                                              
+      118 +### BL-002: Symmetry Deduplication (`--unique` flag)          
+      119 +                                                              
+      120 +| | |                                                         
+      121 +|---|---|                                                     
+      122 +| **File(s)** | `game15.cob` (extends BL-001) |               
+      123 +| **Key result** | 31,896 unique games modulo D4 symmetry |   
+      124 +| **Original prompt** | *"add a flag to compute numbers withou
+          +t duplicates"* |                                              
+      125 +| **Replay prompt** | Add a `--unique` command-line flag to th
+          +e Game of 15 counter. When set, also count games modulo board 
+          +symmetry. The Game of 15 is isomorphic to tic-tac-toe via the 
+          +3x3 magic square; use the dihedral group D4 (8 symmetries: 4 r
+          +otations + 4 reflections) to identify equivalent games. Only c
+          +ount a game if its move sequence is the lexicographically smal
+          +lest among all 8 symmetric images. Report unique P1 wins, P2 w
+          +ins, draws, and total. |                                      
+      126 +                                                              
+      127 +### BL-003: Optimal Play Tree (Minimax + ASCII)               
+      128 +                                                              
+      129 +| | |                                                         
+      130 +|---|---|                                                     
+      131 +| **File(s)** | `game15tree.cob` |                            
+      132 +| **Key result** | 12,133 nodes, 3,584 terminal draws, 0 force
+          +d wins (game is always a draw under optimal play) |           
+      133 +| **Original prompt** | *"I am interested to depict a tree (in
+          + ASCII format) of all possible moves and the outcome (under op
+          +timal play)... Such a tree would help to know what to play aft
+          +er a certain sequence of 'moves' (numbers' choices in the game
+          + 15)"* |                                                      
+      134 +| **Replay prompt** | Write a COBOL program (GnuCOBOL) that di
+          +splays the optimal play tree for the Game of 15 as ASCII art. 
+          +Use a two-pass architecture: Pass 1 computes minimax values wi
+          +th memoization (base-3 position key, 3^9 = 19,683 entries); Pa
+          +ss 2 traverses the game tree and prints only moves whose minim
+          +ax value equals the parent position's value (i.e., optimal mov
+          +es). Use tree connectors (`\|--`, `+--`) with proper indentati
+          +on. Support a `--depth N` flag to limit display depth. |      
+      135 +                                                              
+      136 +### BL-004: Avoid Annotations                                 
+      137 +                                                              
+      138 +| | |                                                         
+      139 +|---|---|                                                     
+      140 +| **File(s)** | `game15tree.cob` (extends BL-003) |           
+      141 +| **Key result** | 15,303 total lines; at each decision point,
+          + losing moves listed before optimal branches |                
+      142 +| **Original prompt** | *"nice! to 'simplify' a bit, I suggest
+          + that given a sequence of moves/choices, there are (1) follow-
+          +up choice to NOT perform (otherwise you lose); (2) follow-up c
+          +hoice you can make (among many possibly)"* |                  
+      143 +| **Replay prompt** | Enhance the optimal play tree program: a
+          +t each decision point, before showing the optimal move branche
+          +s, print an `avoid:` line listing all available moves whose mi
+          +nimax value is worse than the position's value (i.e., moves th
+          +at would let the opponent win or gain advantage). Classify eac
+          +h available move as either optimal (value equals parent value)
+          + or bad (value differs), and display bad moves in the avoid li
+          +ne. |                                                         
+      144 +                                                              
+      145 +### BL-005: Game of 0.15 Variant                              
+      146 +                                                              
+      147 +| | |                                                         
+      148 +|---|---|                                                     
+      149 +| **File(s)** | `game015.cob`, `game015tree.cob` |            
+      150 +| **Key result** | Identical game counts; display uses "0.0X" 
+          +number format |                                               
+      151 +| **Original prompt** | *"The game of 0.15 is defined as follo
+          +ws: Two players in turn say a number among 0.01, 0.02,..., 0.0
+          +9. A particular number may not be repeated. The game is won by
+          + the player who has said three numbers whose sum is 0.15. If a
+          +ll the numbers are used and no one gets three numbers that add
+          + up to 0.15 then the game is a draw. Please adapt your program
+          + to count the number of games, as well as the tree"* |        
+      152 +| **Replay prompt** | Create two COBOL programs (`game015.cob`
+          + counter + `game015tree.cob` tree) for the "Game of 0.15": pla
+          +yers pick from {0.01, 0.02, ..., 0.09}, target sum is 0.15. Th
+          +is is mathematically identical to the Game of 15 (scaled by 1/
+          +100). Keep the internal representation as integers 1-9 for eff
+          +iciency; only change the display format to show numbers as "0.
+          +0X" (e.g., "P1:0.05"). |                                      
+      153 +                                                              
+      154 +### BL-006: Parameterized Variant Generator                   
+      155 +                                                              
+      156 +| | |                                                         
+      157 +|---|---|                                                     
+      158 +| **File(s)** | `gameN.cob` |                                 
+      159 +| **Key result** | Works for any target sum N; `./gameN 15 9` 
+          +reproduces 255,168; `./gameN 12 8` gives 34,704 |             
+      160 +| **Original prompt** | *"Provide a generator that 'invents' a
+          + variant of the game of N=15 by changing N (eg 0.15) and thus 
+          +the possible numbers users can choose. Please recap the rules 
+          +of the game of N after"* |                                    
+      161 +| **Replay prompt** | Write a COBOL program (GnuCOBOL) that ac
+          +cepts a target sum and optional max-number as command-line arg
+          +uments (e.g., `./gameN 15 9`). Dynamically generate all winnin
+          +g triples (three distinct numbers from {1..max} summing to tar
+          +get). Display the game rules, number pool, and all winning tri
+          +ples. If max-number <= 9, enumerate all possible games via DFS
+          + and report P1 wins, P2 wins, draws, and total. Auto-derive ma
+          +x-number as `target - 3` (capped at [3, 15]) if not provided. 
+          +Include input validation and a usage message. |               
+      162 +                                                              
+      163  ### Implementation Order and Dependencies
+      164  
+      165  ```
+      123 -BL-001  Game counter                                          
+      166 +BL-001  Game counter (from scratch)                           
+      167    +-- BL-002  adds --unique flag (extends BL-001)
+      125 -BL-003  Optimal play tree                                     
+      126 -  +-- BL-004  adds avoid annotations (extends BL-003)         
+      168 +BL-003  Optimal play tree (new program)                       
+      169 +  +-- BL-004  adds avoid annotations (extends BL-003, user sug
+          +gestion)                                                      
+      170  BL-005  Game of 0.15 (clones BL-001/002 + BL-003/004 with disp
+           lay changes)
+      171  BL-006  Variant generator (generalizes BL-001 to arbitrary N)
+      129 -BL-007  Git init + commit                                     
+      130 -BL-008  GitHub push                                           
+      172  ```
+      173  
+      174  ### Bugs Encountered and Fixed
+     ...
+      181  
+      182  ## Agentic Context
+      183  
+      143 -All code was generated by Claude (Anthropic) in a single Claud
+          -e Code session over 2026-03-12 to 2026-03-13, with a git/push 
+          -step on 2026-03-19. The session comprised 10 user messages and
+          - produced 1,924 lines of COBOL across 5 programs. All programs
+          - compiled with zero errors on GnuCOBOL 3.2.0.                 
+      184 +All code was generated by Claude (Anthropic) in a single Claud
+          +e Code session over 2026-03-12 to 2026-03-13. The session comp
+          +rised 10 user messages and produced 1,924 lines of COBOL acros
+          +s 5 programs. All programs compiled with zero errors on GnuCOB
+          +OL 3.2.0.                                                     
+
+⏺ Updated. Key changes:
+
+  - Removed BL-007/BL-008 (git/GitHub chores) — out of scope
+  - Each BL item now has two prompts:
+    - Original prompt — verbatim quote from the user session
+    - Replay prompt — self-contained, precise description for reproducing the
+  feature with another agent
+  - BL-004 now clearly shows it originated from a user suggestion (with the
+  original quote making this explicit)
+  - BL-001's original prompt is preserved in full — the foundational "from
+  scratch" instruction
+  - Dependency tree trimmed to only the 6 feature items
+
+✻ Cooked for 1m 17s
+
+❯ Both bugs relate to COBOL's flat (global) variable scope — there are no local 
+ variables, so all paragraphs share the same working storage... please clarify  
+  ⎿  Interrupted · What should Claude do instead?
+
+❯ my clarification request is: what's the impact of these "bugs"? are there     
+still bugs? is there a kind of workaround that has been effective?              
+
+⏺ Good question. Let me verify the current state of the fixes in the code.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Both bugs were found and fixed during the session — no bugs remain in the
+  shipped code. Let me rewrite that section to make this clear.
+
+⏺ Update(README.md)
+  ⎿  Added 5 lines, removed 3 lines
+      173  
+      174  ### Bugs Encountered and Fixed
+      175  
+      176 -1. **Display bug (BL-003):** `CUR-NUM` was `PIC 99` (two digit
+          -s); moving the value "01" to a `PIC X(1)` field took only the 
+          -first character "0", so all moves displayed as "P1:0". Fixed b
+          -y introducing a `DISP-DIGIT PIC 9` intermediary.              
+      176 +Both bugs were **detected and fixed during the session** — no 
+          +bugs remain in the shipped code. They illustrate a recurring C
+          +OBOL challenge: all variables live in a single global WORKING-
+          +STORAGE, so any paragraph can silently overwrite a variable th
+          +at another paragraph still depends on.                        
+      177  
+      178 -2. **Variable corruption (BL-004):** The `COLLECT-OPTIMAL` loo
+          -p overwrote `CUR-NUM` via `MOVE TRIAL-NUM TO CUR-NUM`, then th
+          -e undo operation `MOVE 0 TO OWNER(CUR-NUM)` freed the wrong nu
+          -mber. Fixed by using `OWNER(CHOSEN(DEPTH))` to reference the s
+          -aved move instead.                                            
+      178 +1. **Display bug (BL-003):** `CUR-NUM` was declared as `PIC 99
+          +` (two-digit numeric). When its value (e.g., `01`) was moved i
+          +nto a `PIC X(1)` display field, COBOL took only the first char
+          +acter `"0"`, so every move rendered as `"P1:0"`. **Impact:** a
+          +ll move numbers in the tree output were wrong. **Workaround:**
+          + a dedicated `DISP-DIGIT PIC 9` variable was introduced as an 
+          +intermediary — `CUR-NUM` is moved to `DISP-DIGIT` (numeric-to-
+          +numeric, truncates to 1 digit correctly), then `DISP-DIGIT` is
+          + moved to the output line (`game15tree.cob:91`, `game15tree.co
+          +b:477-478`).                                                  
+      179  
+      180 -Both bugs relate to COBOL's flat (global) variable scope — the
+          -re are no local variables, so all paragraphs share the same wo
+          -rking storage.                                                
+      180 +2. **Variable corruption (BL-004):** The `COLLECT-OPTIMAL` par
+          +agraph loops over trial moves using `MOVE TRIAL-NUM TO CUR-NUM
+          +` (needed because `CHECK-WIN` reads `CUR-NUM`). But the *calli
+          +ng* paragraph (`TREE-STEP`) also used `CUR-NUM` to track its o
+          +wn chosen move. After `COLLECT-OPTIMAL` returned, `CUR-NUM` he
+          +ld the last trial value instead of the actual chosen move, so 
+          +the undo operation `MOVE 0 TO OWNER(CUR-NUM)` freed the wrong 
+          +number — corrupting the board state. **Impact:** the tree show
+          +ed `[]` empty annotations and incorrect win/draw labels. **Wor
+          +karound:** the undo now reads the move from the `CHOSEN(DEPTH)
+          +` array (which is never overwritten by inner loops) instead of
+          + relying on `CUR-NUM` (`game15tree.cob:310`, `game15tree.cob:3
+          +74`).                                                         
+      181  
+      182 +Both workarounds are effective: the programs produce correct, 
+          +verified output. The root cause — COBOL's lack of local/scoped
+          + variables — is a language constraint, not a residual defect. 
+      183 +                                                              
+      184  ## Agentic Context
+      185  
+      186  All code was generated by Claude (Anthropic) in a single Claud
+           e Code session over 2026-03-12 to 2026-03-13. The session comp
+           rised 10 user messages and produced 1,924 lines of COBOL acros
+           s 5 programs. All programs compiled with zero errors on GnuCOB
+           OL 3.2.0.
+
+⏺ Updated. The section now answers your three questions:
+
+  - Impact: Bug 1 made all move numbers wrong ("P1:0"); Bug 2 corrupted board
+  state causing wrong annotations
+  - Still present? No — both were detected and fixed during the session, no bugs
+   remain
+  - Workarounds: (1) a dedicated DISP-DIGIT PIC 9 intermediary for safe numeric
+  truncation; (2) reading the move from the CHOSEN(DEPTH) array instead of the
+  volatile CUR-NUM. Both are effective and the root cause (COBOL's flat global
+  scope) is a language constraint, not a residual defect
+
+✻ Cogitated for 31s
+
+❯ remove dash em                                                                
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      1  # Game of 15 in COBOL
+      2  
+      3 -Five COBOL programs exploring the **Game of 15** — a combinatori
+        -al number-picking game isomorphic to Tic-Tac-Toe via the 3x3 mag
+        -ic square.                                                      
+      3 +Five COBOL programs exploring the **Game of 15**, a combinatoria
+        +l number-picking game isomorphic to Tic-Tac-Toe via the 3x3 magi
+        +c square.                                                       
+      4  
+      5  ## The Game of 15
+      6  
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      18  
+      19  ## Programs
+      20  
+      21 -### game15.cob — Game Counter                                  
+      21 +### game15.cob: Game Counter                                   
+      22  
+      23  Enumerates all possible games via iterative DFS with backtracki
+          ng. Reports win/draw counts.
+      24  
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      42  Total games:      31896
+      43  ```
+      44  
+      45 -### game15tree.cob — Optimal Play Tree                         
+      45 +### game15tree.cob: Optimal Play Tree                          
+      46  
+      47  Two-pass program: (1) minimax with memoization over all 19,683 
+          positions (3^9 base-3 keys), (2) ASCII tree showing only optima
+          l moves.
+      48  
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      46  
+      47  Two-pass program: (1) minimax with memoization over all 19,683 
+          positions (3^9 base-3 keys), (2) ASCII tree showing only optima
+          l moves.
+      48  
+      49 -Under optimal play the game always ends in a draw — no player c
+         -an force a win.                                                
+      49 +Under optimal play the game always ends in a draw; no player ca
+         +n force a win.                                                 
+      50  
+      51  ```
+      52  $ cobc -x -o game15tree game15tree.cob
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      68  
+      69  At each node, **avoid** lines list moves that would lose, and b
+          ranches show safe/optimal moves.
+      70  
+      71 -### game015.cob / game015tree.cob — Game of 0.15               
+      71 +### game015.cob / game015tree.cob: Game of 0.15                
+      72  
+      73  Variant where players pick from {0.01, 0.02, ..., 0.09} and the
+           target sum is 0.15. Mathematically identical (scaled by 1/100)
+          ; internal representation uses integers 1–9, only the display f
+          ormat changes.
+      74  
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      70  
+      71  ### game015.cob / game015tree.cob: Game of 0.15
+      72  
+      73 -Variant where players pick from {0.01, 0.02, ..., 0.09} and the
+         - target sum is 0.15. Mathematically identical (scaled by 1/100)
+         -; internal representation uses integers 1–9, only the display f
+         -ormat changes.                                                 
+      73 +Variant where players pick from {0.01, 0.02, ..., 0.09} and the
+         + target sum is 0.15. Mathematically identical (scaled by 1/100)
+         +; internal representation uses integers 1-9, only the display f
+         +ormat changes.                                                 
+      74  
+      75  ```
+      76  $ cobc -x -o game015 game015.cob && cobc -x -o game015tree game
+          015tree.cob
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      78  $ ./game015tree --depth 2   # tree with "P1:0.05" format
+      79  ```
+      80  
+      81 -### gameN.cob — Variant Generator                              
+      81 +### gameN.cob: Variant Generator                               
+      82  
+      83  Parameterized program that defines and analyzes any "Game of N"
+           variant. Dynamically generates winning triples, displays rules
+          , and enumerates all games (for max-number <= 9).
+      84  
+
+⏺ Now the two em dashes in the bugs section:
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      173  
+      174  ### Bugs Encountered and Fixed
+      175  
+      176 -Both bugs were **detected and fixed during the session** — no 
+          -bugs remain in the shipped code. They illustrate a recurring C
+          -OBOL challenge: all variables live in a single global WORKING-
+          -STORAGE, so any paragraph can silently overwrite a variable th
+          -at another paragraph still depends on.                        
+      176 +Both bugs were **detected and fixed during the session**. No b
+          +ugs remain in the shipped code. They illustrate a recurring CO
+          +BOL challenge: all variables live in a single global WORKING-S
+          +TORAGE, so any paragraph can silently overwrite a variable tha
+          +t another paragraph still depends on.                         
+      177  
+      178  1. **Display bug (BL-003):** `CUR-NUM` was declared as `PIC 99
+           ` (two-digit numeric). When its value (e.g., `01`) was moved i
+           nto a `PIC X(1)` display field, COBOL took only the first char
+           acter `"0"`, so every move rendered as `"P1:0"`. **Impact:** a
+           ll move numbers in the tree output were wrong. **Workaround:**
+            a dedicated `DISP-DIGIT PIC 9` variable was introduced as an 
+           intermediary — `CUR-NUM` is moved to `DISP-DIGIT` (numeric-to-
+           numeric, truncates to 1 digit correctly), then `DISP-DIGIT` is
+            moved to the output line (`game15tree.cob:91`, `game15tree.co
+           b:477-478`).
+      179  
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      177  
+      178  1. **Display bug (BL-003):** `CUR-NUM` was declared as `PIC 99
+           ` (two-digit numeric). When its value (e.g., `01`) was moved i
+           nto a `PIC X(1)` display field, COBOL took only the first char
+           acter `"0"`, so every move rendered as `"P1:0"`. **Impact:** a
+           ll move numbers in the tree output were wrong. **Workaround:**
+            a dedicated `DISP-DIGIT PIC 9` variable was introduced as an 
+           intermediary — `CUR-NUM` is moved to `DISP-DIGIT` (numeric-to-
+           numeric, truncates to 1 digit correctly), then `DISP-DIGIT` is
+            moved to the output line (`game15tree.cob:91`, `game15tree.co
+           b:477-478`).
+      179  
+      180 -2. **Variable corruption (BL-004):** The `COLLECT-OPTIMAL` par
+          -agraph loops over trial moves using `MOVE TRIAL-NUM TO CUR-NUM
+          -` (needed because `CHECK-WIN` reads `CUR-NUM`). But the *calli
+          -ng* paragraph (`TREE-STEP`) also used `CUR-NUM` to track its o
+          -wn chosen move. After `COLLECT-OPTIMAL` returned, `CUR-NUM` he
+          -ld the last trial value instead of the actual chosen move, so 
+          -the undo operation `MOVE 0 TO OWNER(CUR-NUM)` freed the wrong 
+          -number — corrupting the board state. **Impact:** the tree show
+          -ed `[]` empty annotations and incorrect win/draw labels. **Wor
+          -karound:** the undo now reads the move from the `CHOSEN(DEPTH)
+          -` array (which is never overwritten by inner loops) instead of
+          - relying on `CUR-NUM` (`game15tree.cob:310`, `game15tree.cob:3
+          -74`).                                                         
+      180 +2. **Variable corruption (BL-004):** The `COLLECT-OPTIMAL` par
+          +agraph loops over trial moves using `MOVE TRIAL-NUM TO CUR-NUM
+          +` (needed because `CHECK-WIN` reads `CUR-NUM`). But the *calli
+          +ng* paragraph (`TREE-STEP`) also used `CUR-NUM` to track its o
+          +wn chosen move. After `COLLECT-OPTIMAL` returned, `CUR-NUM` he
+          +ld the last trial value instead of the actual chosen move, so 
+          +the undo operation `MOVE 0 TO OWNER(CUR-NUM)` freed the wrong 
+          +number, corrupting the board state. **Impact:** the tree showe
+          +d `[]` empty annotations and incorrect win/draw labels. **Work
+          +around:** the undo now reads the move from the `CHOSEN(DEPTH)`
+          + array (which is never overwritten by inner loops) instead of 
+          +relying on `CUR-NUM` (`game15tree.cob:310`, `game15tree.cob:37
+          +4`).                                                          
+      181  
+      182  Both workarounds are effective: the programs produce correct, 
+           verified output. The root cause — COBOL's lack of local/scoped
+            variables — is a language constraint, not a residual defect.
+      183  
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      179  
+      180  2. **Variable corruption (BL-004):** The `COLLECT-OPTIMAL` par
+           agraph loops over trial moves using `MOVE TRIAL-NUM TO CUR-NUM
+           ` (needed because `CHECK-WIN` reads `CUR-NUM`). But the *calli
+           ng* paragraph (`TREE-STEP`) also used `CUR-NUM` to track its o
+           wn chosen move. After `COLLECT-OPTIMAL` returned, `CUR-NUM` he
+           ld the last trial value instead of the actual chosen move, so 
+           the undo operation `MOVE 0 TO OWNER(CUR-NUM)` freed the wrong 
+           number, corrupting the board state. **Impact:** the tree showe
+           d `[]` empty annotations and incorrect win/draw labels. **Work
+           around:** the undo now reads the move from the `CHOSEN(DEPTH)`
+            array (which is never overwritten by inner loops) instead of 
+           relying on `CUR-NUM` (`game15tree.cob:310`, `game15tree.cob:37
+           4`).
+      181  
+      182 -Both workarounds are effective: the programs produce correct, 
+          -verified output. The root cause — COBOL's lack of local/scoped
+          - variables — is a language constraint, not a residual defect. 
+      182 +Both workarounds are effective: the programs produce correct, 
+          +verified output. The root cause (COBOL's lack of local/scoped 
+          +variables) is a language constraint, not a residual defect.   
+      183  
+      184  ## Agentic Context
+      185  
+
+⏺ Now check for any remaining em dashes (—) or en dashes (–):
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      175  
+      176  Both bugs were **detected and fixed during the session**. No b
+           ugs remain in the shipped code. They illustrate a recurring CO
+           BOL challenge: all variables live in a single global WORKING-S
+           TORAGE, so any paragraph can silently overwrite a variable tha
+           t another paragraph still depends on.
+      177  
+      178 -1. **Display bug (BL-003):** `CUR-NUM` was declared as `PIC 99
+          -` (two-digit numeric). When its value (e.g., `01`) was moved i
+          -nto a `PIC X(1)` display field, COBOL took only the first char
+          -acter `"0"`, so every move rendered as `"P1:0"`. **Impact:** a
+          -ll move numbers in the tree output were wrong. **Workaround:**
+          - a dedicated `DISP-DIGIT PIC 9` variable was introduced as an 
+          -intermediary — `CUR-NUM` is moved to `DISP-DIGIT` (numeric-to-
+          -numeric, truncates to 1 digit correctly), then `DISP-DIGIT` is
+          - moved to the output line (`game15tree.cob:91`, `game15tree.co
+          -b:477-478`).                                                  
+      178 +1. **Display bug (BL-003):** `CUR-NUM` was declared as `PIC 99
+          +` (two-digit numeric). When its value (e.g., `01`) was moved i
+          +nto a `PIC X(1)` display field, COBOL took only the first char
+          +acter `"0"`, so every move rendered as `"P1:0"`. **Impact:** a
+          +ll move numbers in the tree output were wrong. **Workaround:**
+          + a dedicated `DISP-DIGIT PIC 9` variable was introduced as an 
+          +intermediary. `CUR-NUM` is moved to `DISP-DIGIT` (numeric-to-n
+          +umeric, truncates to 1 digit correctly), then `DISP-DIGIT` is 
+          +moved to the output line (`game15tree.cob:91`, `game15tree.cob
+          +:477-478`).                                                   
+      179  
+      180  2. **Variable corruption (BL-004):** The `COLLECT-OPTIMAL` par
+           agraph loops over trial moves using `MOVE TRIAL-NUM TO CUR-NUM
+           ` (needed because `CHECK-WIN` reads `CUR-NUM`). But the *calli
+           ng* paragraph (`TREE-STEP`) also used `CUR-NUM` to track its o
+           wn chosen move. After `COLLECT-OPTIMAL` returned, `CUR-NUM` he
+           ld the last trial value instead of the actual chosen move, so 
+           the undo operation `MOVE 0 TO OWNER(CUR-NUM)` freed the wrong 
+           number, corrupting the board state. **Impact:** the tree showe
+           d `[]` empty annotations and incorrect win/draw labels. **Work
+           around:** the undo now reads the move from the `CHOSEN(DEPTH)`
+            array (which is never overwritten by inner loops) instead of 
+           relying on `CUR-NUM` (`game15tree.cob:310`, `game15tree.cob:37
+           4`).
+      181  
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ All em dashes and en dashes removed. Replaced with periods, semicolons,
+  commas, colons, or parentheses depending on context.
+
+✻ Churned for 1m 19s
