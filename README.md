@@ -106,7 +106,7 @@ cobc -x -o gameN gameN.cob
 
 Reconstructed implementation history from the Claude Code session that produced this repository. Each feature was requested by the user as a prompt; the table below records both the **original prompt** (verbatim) and a **replay prompt** (self-contained description suitable for reproducing the feature with another LLM/agent).
 
-For a more granular, agent-centric view of all 31 technical capabilities that were actually implemented (including autonomous decisions, algorithms, and bug fixes), see [SPECIFICATION_BACKLOG.md](SPECIFICATION_BACKLOG.md).
+For a more granular, agent-centric view of all 31 technical capabilities that were actually implemented (including autonomous decisions, algorithms, and bug fixes), see [SPECIFICATION_BACKLOG.md](SPECIFICATION_BACKLOG.md). For algorithm-agnostic prompts suitable for reproducing each step with another coding agent, see [REPLAY_PROMPTS.md](REPLAY_PROMPTS.md).
 
 ### BL-001: Game of 15 Counter
 
