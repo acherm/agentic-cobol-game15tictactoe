@@ -1,3 +1,18 @@
+> ## 🧪 Research artifact of the coding-agents COBOL study
+>
+> This repository is **`TTTGAME15-COBOL-CLAUDE`** (folder `cobol-tictactoe`), one of **16 COBOL systems
+> developed from scratch by frontier coding agents** in the multi-case study
+> *Coding Agents Develop COBOL Systems: Evidence from a Multi-Case Empirical Study* (2026).
+>
+> **What it is:** exhaustive enumeration and optimal play for the Game of 15 (isomorphic to tic-tac-toe).
+> **Oracle:** exact counts (255,168 games, 31,896 D4-canonical) and verified optimal minimax play.
+> **Built by:** Claude Code (`claude-opus-4-6`) in recorded sessions: 12 substantive prompts,
+> 2.1 active hours, 1,537 lines of COBOL, difficulty Medium.
+>
+> The code, documentation, and git history are preserved as the agent produced them
+> (treat them as research artifacts). Study hub with all 16 systems, the analysis
+> pipeline, session logs, and replay packs: **https://github.com/acherm/agentic-cobol-study**
+
 # Game of 15 in COBOL
 
 Five COBOL programs exploring the **Game of 15**, a combinatorial number-picking game isomorphic to Tic-Tac-Toe via the 3x3 magic square.
